@@ -4,12 +4,12 @@ django-rest-framework==0.1.0
 djangorestframework==3.13.1
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==5.1.0
+PyJWT==1.7.1
+python-dotenv==0.20.0
+psycopg2==2.9.3
 environs==9.5.0
 marshmallow==3.15.0
 packaging==21.3
-psycopg2==2.9.3
-PyJWT==1.7.1
 pyparsing==3.0.9
-python-dotenv==0.20.0
 pytz==2022.1
 sqlparse==0.4.2

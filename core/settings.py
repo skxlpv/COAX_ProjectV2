@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'api',
     'base',
     'users',
+    'hospitals',
 
     'rest_framework',
     'rest_framework_simplejwt'

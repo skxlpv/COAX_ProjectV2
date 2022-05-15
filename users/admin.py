@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
 from users.models import User
@@ -11,14 +10,14 @@ from users.models import User
 #     print(1)
 #     print(current_user.hospital)
 
+
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        #'hospital'
-        fields = ('email', 'first_name', 'last_name', 'role')
+        fields = ('email', 'first_name', 'last_name', 'hospital', 'role')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -53,8 +52,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        #'hospital'
-        fields = ('email', 'password', 'first_name', 'last_name',
+        fields = ('email', 'password', 'first_name', 'last_name', 'hospital',
                   'role', 'is_active', 'is_admin', 'is_staff')
 
 
@@ -67,8 +65,7 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
 
-    #'hospital'
-    list_display = ('id','email', 'first_name', 'last_name', 'role', )
+    list_display = ('email', 'id', 'first_name', 'last_name', 'hospital','role', )
     list_filter = ('is_admin', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -90,5 +87,3 @@ class UserAdmin(BaseUserAdmin):
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-# ... and, since we're not using Django's built-in permissions,
-# unregister the Group model from admin.
