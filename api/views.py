@@ -1,15 +1,27 @@
 from rest_framework import generics
+from rest_framework.permissions import BasePermission, DjangoModelPermissions, SAFE_METHODS
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from base.models import Post
 from .serializers import PostSerializer
 
+class TheOnlyAuthorPermission(BasePermission):
+    message = 'Only the author of the post can edit it.'
 
-# Create your views here.
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return obj.author == request.user
+
+
 class PostList(generics.ListCreateAPIView):
+    permission_classes = [DjangoModelPermissions]
     queryset = Post.postobjects.all()
     serializer_class = PostSerializer
-    pass
 
 
-class PostDetail(generics.RetrieveDestroyAPIView):
+class PostDetail(generics.RetrieveDestroyAPIView, TheOnlyAuthorPermission):
+    permission_classes = [TheOnlyAuthorPermission]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
