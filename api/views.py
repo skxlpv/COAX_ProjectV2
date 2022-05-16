@@ -19,7 +19,6 @@ class PostList(generics.ListCreateAPIView):
     permission_classes = [DjangoModelPermissions]
     queryset = Post.postobjects.all()
     serializer_class = PostSerializer
-    pass
 
 
 class PostDetail(generics.RetrieveDestroyAPIView, TheOnlyAuthorPermission):
