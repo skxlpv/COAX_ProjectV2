@@ -3,26 +3,37 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.conf import settings
 from hospitals.models import Hospitals
-
+from django.utils.translation import gettext_lazy as _
 
 class CustomUsermanager(BaseUserManager):
 
-    def create_user(self, email, password, first_name, last_name, hospital_name, role):
+    def create_user(self, email, password, first_name, last_name, hospital_name, role, **other_fields):
+        if not email:
+            raise ValueError(_('You must provide an email address'))
+
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
             hospital_name=hospital_name,
-            role=role
+            role=role,
+            **other_fields
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password, first_name, last_name):
+
+        if not email:
+            raise ValueError(_('You must provide an email address'))
+
         user = self.model(
-            email=email,
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name,
         )
+
         user.set_password(password)
         user.is_staff = True
         user.is_superuser = True
@@ -58,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     objects = CustomUsermanager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name', 'last_name', ]
 
     def __str__(self):
         return self.email
