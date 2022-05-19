@@ -65,7 +65,7 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
 
-    list_display = ('email', 'id', 'first_name', 'last_name', 'hospital','role', )
+    list_display = ('email', 'id', 'first_name', 'last_name', 'hospital', 'role', )
     list_filter = ('is_admin', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -85,5 +85,4 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-# Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
