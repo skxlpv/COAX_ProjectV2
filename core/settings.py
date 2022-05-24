@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'base',
     'users',
     'hospitals',
+    'articles',
 
     'corsheaders',
     'rest_framework',
