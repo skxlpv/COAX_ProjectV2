@@ -17,7 +17,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Articles
-        fields = ('id', 'category', 'title', 'excerpt', 'text', 'author')
+        fields = ('id', 'title', 'excerpt', 'text', 'author')
         read_only_fields = ('id', )
 
     @transaction.atomic

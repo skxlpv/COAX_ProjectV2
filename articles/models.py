@@ -7,15 +7,15 @@ from hospitals.models import Hospitals
 from users.models import User
 
 
-class Categories(models.Model):
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        verbose_name_plural = 'Categories'
-        verbose_name = _('Category')
-    def __str__(self):
-        return self.name
-
+# class Categories(models.Model):
+#     name = models.CharField(max_length=100)
+#
+#     class Meta:
+#         verbose_name_plural = 'Categories'
+#         verbose_name = _('Category')
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Articles(models.Model):
@@ -28,14 +28,14 @@ class Articles(models.Model):
         ('published', 'Published'),
     )
 
-    category = models.ForeignKey(
-        Categories, on_delete=models.PROTECT, default=1, editable=False)
+    # category = models.ForeignKey(
+    #     Categories, on_delete=models.PROTECT, default='', editable=False)
     title = models.CharField(max_length=250)
-    excerpt = models.TextField()  #витяг
+    excerpt = models.TextField()  # витяг
     text = models.TextField()
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     # hospital = models.ForeignKey(Hospitals, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=10, choices=options, default='')

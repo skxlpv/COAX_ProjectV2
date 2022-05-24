@@ -6,7 +6,14 @@ from articles.models import Articles
 from articles.serializers import ArticleSerializer
 
 
-class ArticleVieSet(mixins.CreateModelMixin,
+class AddArticleViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    GenericViewSet):
+    # permission_classes = (IsAuthenticated,)
+    # queryset = Articles.objects.all()
+    serializer_class = ArticleSerializer
+
+class ArticlesViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     GenericViewSet):
     # permission_classes = (IsAuthenticated,)
