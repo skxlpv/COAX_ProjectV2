@@ -19,5 +19,8 @@ class ArticlesViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     GenericViewSet):
     # permission_classes = (IsAuthenticated,)
+    # queryset = Articles.objects.filter(status='review')       # Відображає лиш ті, які потребують підтвердження
+    # queryset = Articles.objects.filter(status='published')   # Відображає лиш підтверджені
     queryset = Articles.objects.all()
+    # Відображає всі
     serializer_class = ArticleSerializer
