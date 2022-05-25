@@ -20,11 +20,11 @@ class BlackListTokenView(APIView):
             return Response({'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# вьюшка видачі поточного юзера на фронт, в окопи))
+# sends the current user data to the FrontEnd
 @api_view(['GET'])
 def current_user(request):
     user = request.user
     return Response({
-        # значення, які треба передати в поточному юзері на фронт
+        # user data, that should be passed to the FrontEnd
         'email': user.email,
     })
