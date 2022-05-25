@@ -5,15 +5,15 @@ class IsLeader(BasePermission):
     message = "Sorry, you don't have Leader or Admin rights for adding a post."
 
     def has_permission(self, request, view):
-        # # чи метод (PUT, POST, GET...) є дозволеним
+        # # if the method (PUT, POST, GET...) is allowed
         # if request.method in SAFE_METHODS:
         #     return True
 
-        # витяг ролі чи, можливо, адмінки поточного користувача
+        # extracts the user's role
         user_roles = request.user.role
         is_superuser = request.user.is_superuser
 
-        # перевірка чи користувач є лідером чи адміном
+        # checks if it's Leader or, perhaps, Admin
         if user_roles == 'LD':
             return bool(request.user)
         elif is_superuser:
@@ -65,7 +65,7 @@ class IsWriter(BasePermission):
             return bool(request.user)
 
 
-# для редагування постів, перевіряє чи це той самий автор редагує свій пост
+# for post edit, checks if it's the same author edits their's post
 class IsSameAuthor(BasePermission):
     message = "You're not the author of this post"
 

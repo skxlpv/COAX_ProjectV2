@@ -5,8 +5,8 @@ from django.conf import settings
 from hospitals.models import Hospitals
 from django.utils.translation import gettext_lazy as _
 
-class CustomUsermanager(BaseUserManager):
 
+class CustomUsermanager(BaseUserManager):
     def create_user(self, email, password, first_name, last_name, hospital_name, role, **other_fields):
         if not email:
             raise ValueError(_('You must provide an email address'))
