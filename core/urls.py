@@ -13,6 +13,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls'), name='base'),
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('articles/', include('articles.urls'), name='articles')
+    path('articles/', include('articles.urls'), name='articles'),
+    path('hospitals/', include('hospitals.urls'), name='hospitals'),
 ]
 

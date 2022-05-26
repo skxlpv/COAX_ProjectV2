@@ -28,7 +28,7 @@ class Hospitals(models.Model):
 
 class Departments(models.Model):
     department_name = models.CharField(max_length=255)
-    hospital_name = models.ForeignKey(Hospitals, on_delete=models.CASCADE, related_name='hospital')
+    hospital_name = models.ManyToManyField(Hospitals)
 
     def __str__(self):
         return f"{self.department_name}"
