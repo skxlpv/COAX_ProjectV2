@@ -38,12 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+    'mptt',
 
     'api',
     'base',
     'users',
-    'hospitals',
     'articles',
+    'hospitals',
+    'management',
+    
 
     'corsheaders',
     'rest_framework',
