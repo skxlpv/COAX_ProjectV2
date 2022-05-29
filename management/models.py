@@ -1,5 +1,4 @@
 from django.utils.text import slugify
-from mptt.models import MPTTModel, TreeForeignKey
 from django.db import models
 
 
@@ -18,12 +17,8 @@ class Item(models.Model):
         return f"{self.name}"
 
 
-class Category(MPTTModel):
+class Category(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Category title')
-    parent = models.ForeignKey('self', on_delete=models.CASCADE,
-                               null=True, blank=True,
-                               related_name='children',
-                               verbose_name='Is subcategory of')
 
     class Meta:
         verbose_name = 'Category'
