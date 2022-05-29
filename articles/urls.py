@@ -5,7 +5,7 @@ from articles import views
 
 router = SimpleRouter(trailing_slash=True)
 router.register('', views.ArticlesViewSet, basename='articles')
-router.register('create/', views.AddArticleViewSet, basename='createArticle')
+router.register('create', views.AddArticleViewSet, basename='createArticle')
 
 urlpatterns = [
     # path('add/', views.AddArticleViewSet.as_view({'post': 'create'}), name='add-articles'),

@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_GET, require_http_methods
 from rest_framework import mixins
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -15,8 +16,8 @@ class AddArticleViewSet(mixins.CreateModelMixin,
     serializer_class = ArticlesSerializer
 
 
-class ArticlesViewSet(mixins.CreateModelMixin,
-                      mixins.ListModelMixin,
+# @require_http_methods(["GET", ])
+class ArticlesViewSet(mixins.ListModelMixin,
                       GenericViewSet):
     # permission_classes = (IsAuthenticated,)
     # queryset = Articles.objects.filter(status='review')       # Відображає лиш ті, які потребують підтвердження
