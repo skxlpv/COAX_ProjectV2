@@ -1,6 +1,8 @@
 from django.utils.text import slugify
 from django.db import models
 
+from hospitals.models import Departments
+
 
 class Item(models.Model):
     name = models.CharField(max_length=120, verbose_name='Item title')
@@ -19,6 +21,9 @@ class Item(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Category title')
+    department = models.ForeignKey(Departments, related_name='categories',
+                                   on_delete=models.CASCADE,
+                                   verbose_name='Department', default=1)
 
     class Meta:
         verbose_name = 'Category'
