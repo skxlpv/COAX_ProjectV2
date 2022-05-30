@@ -27,7 +27,7 @@ class Hospitals(models.Model):
 
 
 class Departments(models.Model):
-    department_name = models.CharField(max_length=255, unique=True)
+    department_name = models.CharField(max_length=255, unique=True, default='')
     hospital_name = models.ManyToManyField(Hospitals)
 
     def __str__(self):
