@@ -15,7 +15,7 @@ class Cities(models.Model):
 
 
 class Hospitals(models.Model):
-    hospital_name = models.CharField(max_length=255)
+    hospital_name = models.CharField(max_length=255, unique=True)
     hospital_city = models.ForeignKey(Cities, on_delete=models.CASCADE, related_name='cities', default='')
 
     def __str__(self):
@@ -27,7 +27,7 @@ class Hospitals(models.Model):
 
 
 class Departments(models.Model):
-    department_name = models.CharField(max_length=255)
+    department_name = models.CharField(max_length=255, unique=True)
     hospital_name = models.ManyToManyField(Hospitals)
 
     def __str__(self):

@@ -13,12 +13,13 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
+
     def __str__(self):
         return f"{self.category_name}"
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=120, verbose_name='Item title')
+    name = models.CharField(max_length=120, verbose_name='Item title', unique=True)
     category_name = models.ForeignKey(Category, related_name="items",
                                       on_delete=models.CASCADE,
                                       verbose_name='Belongs to')
