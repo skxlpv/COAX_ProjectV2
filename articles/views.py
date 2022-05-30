@@ -10,7 +10,6 @@ from articles.serializers import ArticlesSerializer
 
 
 class AddArticleViewSet(mixins.CreateModelMixin,
-                        mixins.ListModelMixin,
                         GenericViewSet):
     permission_classes = (IsAuthenticated & IsWriter,)
     serializer_class = ArticlesSerializer

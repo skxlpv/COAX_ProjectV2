@@ -6,17 +6,17 @@ from api.permissions import IsWriter
 from .models import User, Articles, Categories
 
 
-# class CategoriesSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = Categories
-#         fields = ('id', 'name')
-#         read_only_fields = ('id',)
+class CategoriesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Categories
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
 
 
 class ArticlesSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    # category = CategoriesSerializer()
+    category = CategoriesSerializer()
 
     class Meta:
         model = Articles
