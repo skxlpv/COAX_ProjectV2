@@ -15,7 +15,8 @@ class AddArticleViewSet(mixins.CreateModelMixin,
     serializer_class = ArticlesSerializer
 
 
-# @require_http_methods(["GET", ])
+# class EditArticleViewSet
+
 class ArticlesViewSet(mixins.ListModelMixin,
                       GenericViewSet):
     # permission_classes = (IsAuthenticated,)
