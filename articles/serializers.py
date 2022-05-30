@@ -1,24 +1,43 @@
 from django.db import transaction
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.fields import Field
+from rest_framework.response import Response
 
-# from articles.models import Articles
-from .models import User, Articles
+from hospitals.serializers import HospitalSerializer
+from .models import Articles, Categories
+
+Field.default_error_messages = {
+    'category': "No such category",
+}
 
 
-class ArticleSerializer(serializers.ModelSerializer):
-    # author = AuthorSerializer
-    # email = User.objects.get(id=author.id)
+class CategoriesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Categories
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
+
+
+class ArticlesSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    category = CategoriesSerializer()
 
     class Meta:
         model = Articles
-        fields = ('id', 'status', 'title', 'excerpt', 'text',  'author')
+        fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author',)
         read_only_fields = ('id',)
+        extra_kwargs = {"category": {"error_messages": {"required": "Give yourself a username"}}}
 
     @transaction.atomic
     def create(self, validated_data):
         author = validated_data.pop('author')
-        print(User.objects.get(id=author.id))
+        category = validated_data.pop('category')
+        try:
+            category = Categories.objects.get(name=category["name"])
+        except:
+            # category = Categories.objects.create(**category)
+            return super(ArticlesSerializer, self).fail('category')
+        validated_data['category_id'] = category.id
         validated_data['author_id'] = author.email
-        return super(ArticleSerializer, self).create(validated_data)
-
+        return super(ArticlesSerializer, self).create(validated_data)
