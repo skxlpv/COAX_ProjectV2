@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'mptt',
 
     'api',
-    'base',
     'users',
     'articles',
     'hospitals',

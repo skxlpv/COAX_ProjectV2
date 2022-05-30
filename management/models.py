@@ -23,6 +23,7 @@ class Item(models.Model):
     category_name = models.ForeignKey(Category, related_name="items",
                                       on_delete=models.CASCADE,
                                       verbose_name='Belongs to')
+    description = models.CharField(max_length=250, verbose_name='Item description', default='', null=True)
     quantity = models.IntegerField(default=1, verbose_name='Quantity of item')
 
     class Meta:
