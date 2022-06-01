@@ -5,7 +5,8 @@ from django.conf import settings
 from hospitals.models import Hospitals
 from django.utils.translation import gettext_lazy as _
 
-class CustomUsermanager(BaseUserManager):
+
+class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password, first_name, last_name, hospital_name, role, **other_fields):
         if not email:
@@ -68,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_writer = models.BooleanField(default=True) #NEW
-    objects = CustomUsermanager()
+    objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
 

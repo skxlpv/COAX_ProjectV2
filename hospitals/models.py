@@ -16,11 +16,11 @@ class Cities(models.Model):
 
 
 class Hospitals(models.Model):
-    hospital_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     region = models.ForeignKey(Cities, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.hospital_name},  {self.region.city}"
+        return f"{self.name}, {self.region.city}"
 
     class Meta:
         ordering = ('-region', )
@@ -36,6 +36,6 @@ class Departments(models.Model):
         return f"{self.name}, {self.hospital_name}"
 
     class Meta:
-        ordering = ('-hospital_name',)
+        ordering = ('-name',)
         verbose_name = _('Departament')
         verbose_name_plural = _('Departments')

@@ -6,5 +6,5 @@ class HospitalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hospitals
-        fields = ('id', 'hospital_name', 'region')
+        fields = ('id', 'name', 'region')
         read_only_fields = ('id',)
