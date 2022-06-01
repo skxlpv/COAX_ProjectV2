@@ -32,7 +32,6 @@ class Hospitals(models.Model):
                                       verbose_name='City')
     hospital_departments = models.ManyToManyField(Departments, verbose_name='Departments')
 
-
     def __str__(self):
         return f"{self.hospital_name}"
 
