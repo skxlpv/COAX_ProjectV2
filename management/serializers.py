@@ -6,7 +6,8 @@ from management.models import Item, Category
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('id', 'category_name', 'name', 'quantity')
+        fields = ('id', 'category_name', 'name',
+                  'description', 'quantity', 'price_of_one')
         read_only_fields = ('category_name',)
 
     def update(self, instance, validated_data):
