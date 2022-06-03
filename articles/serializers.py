@@ -10,7 +10,6 @@ from .models import Articles, Categories
 
 Field.default_error_messages = {
     'category': "No such category",
-    'hospital': 'Everything is okay, just cat\'t get field on this moment',
 }
 
 
@@ -23,6 +22,19 @@ class CategoriesSerializer(serializers.ModelSerializer):
         read_only_fields = ('name',)
 
 
+def validate_category(value):
+    if value['id'] not in Categories.objects.all().values_list('id', flat=True):
+        raise serializers.ValidationError('No such category')
+    return value
+
+# def validate_category(self, value):
+#     try:
+#         Categories.objects.get(id=value["id"])
+#     except Exception as e:
+#         raise serializers.ValidationError('No such category')
+#     return value
+
+
 class ArticlesSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     hospital = HospitalSerializer(read_only=True)
@@ -32,17 +44,10 @@ class ArticlesSerializer(serializers.ModelSerializer):
         model = Articles
         # fields = '__all__'
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
-        read_only_fields = ('id', )
-
-    def validate_category(self, value):
-        try:
-            category = Categories.objects.get(id=value["id"])
-        except:
-            raise serializers.ValidationError('No such category')
-        return category
+        read_only_fields = ('id',)
 
     @transaction.atomic
     def create(self, validated_data):
         category = validated_data.pop('category')
-        validated_data['category_id'] = category.id
+        validated_data['category_id'] = category['id']
         return super(ArticlesSerializer, self).create(validated_data)
