@@ -19,8 +19,7 @@ class AddArticleViewSet(mixins.CreateModelMixin,
         serializer.save(author=self.request.user, hospital=self.request.user.hospital)
 
 
-class ArticlesViewSet(mixins.CreateModelMixin,
-                      mixins.ListModelMixin,
+class ArticlesViewSet(mixins.ListModelMixin,
                       GenericViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = ArticlesSerializer
