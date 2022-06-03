@@ -9,7 +9,7 @@ from users.models import User
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=100, )
+    name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -36,10 +36,10 @@ class Articles(models.Model):
     text = models.TextField()
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        User, to_field='email', on_delete=models.CASCADE, default='', editable=False)
-    # hospital = models.ForeignKey(
-    #     Hospitals, on_delete=models.CASCADE, default='', editable=False
-    # )
+        User, to_field='email', on_delete=models.CASCADE, default='')
+    hospital = models.ForeignKey(
+        Hospitals, on_delete=models.CASCADE, default=''
+    )
     status = models.CharField(
         max_length=10, choices=options, default='review')
     objects = models.Manager()

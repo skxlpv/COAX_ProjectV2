@@ -1,9 +1,11 @@
 from django.db import transaction
-from rest_framework import serializers, status
+from requests import Response
+from rest_framework import serializers
 from rest_framework.fields import Field
-from rest_framework.response import Response
 
+from hospitals.models import Hospitals
 from hospitals.serializers import HospitalSerializer
+from users.serializers import AuthorSerializer
 from .models import Articles, Categories
 
 Field.default_error_messages = {
@@ -12,32 +14,40 @@ Field.default_error_messages = {
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
 
     class Meta:
         model = Categories
         fields = ('id', 'name')
-        read_only_fields = ('id',)
+        read_only_fields = ('name',)
+
+
+def validate_category(value):
+    if value['id'] not in Categories.objects.all().values_list('id', flat=True):
+        raise serializers.ValidationError('No such category')
+    return value
+
+# def validate_category(self, value):
+#     try:
+#         Categories.objects.get(id=value["id"])
+#     except Exception as e:
+#         raise serializers.ValidationError('No such category')
+#     return value
 
 
 class ArticlesSerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    author = AuthorSerializer(read_only=True)
+    hospital = HospitalSerializer(read_only=True)
     category = CategoriesSerializer()
 
     class Meta:
         model = Articles
-        fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author',)
+        # fields = '__all__'
+        fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
         read_only_fields = ('id',)
-        extra_kwargs = {"category": {"error_messages": {"required": "Give yourself a username"}}}
 
     @transaction.atomic
     def create(self, validated_data):
-        author = validated_data.pop('author')
         category = validated_data.pop('category')
-        try:
-            category = Categories.objects.get(name=category["name"])
-        except:
-            # category = Categories.objects.create(**category)
-            return super(ArticlesSerializer, self).fail('category')
-        validated_data['category_id'] = category.id
-        validated_data['author_id'] = author.email
+        validated_data['category_id'] = category['id']
         return super(ArticlesSerializer, self).create(validated_data)
