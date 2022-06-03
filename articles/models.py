@@ -32,7 +32,7 @@ class Articles(models.Model):
     category = models.ForeignKey(
         Categories, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=250)
-    excerpt = models.TextField()  # витяг
+    excerpt = models.TextField()
     text = models.TextField()
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
