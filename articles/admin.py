@@ -10,5 +10,4 @@ admin.site.register(models.Categories)
 
 @admin.register(models.Articles)
 class ArticleAdmin(admin.ModelAdmin):
-
     list_display = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author',)
