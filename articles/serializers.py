@@ -22,11 +22,6 @@ class CategoriesSerializer(serializers.ModelSerializer):
         read_only_fields = ('name',)
 
 
-def validate_category(value):
-    if value['id'] not in Categories.objects.all().values_list('id', flat=True):
-        raise serializers.ValidationError('No such category')
-    return value
-
 # def validate_category(self, value):
 #     try:
 #         Categories.objects.get(id=value["id"])
@@ -46,8 +41,14 @@ class ArticlesSerializer(serializers.ModelSerializer):
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
         read_only_fields = ('id',)
 
+    def validate_category(self, value):
+        if value['id'] not in Categories.objects.all().values_list('id', flat=True):
+            raise serializers.ValidationError('No such category')
+        return value
+
     @transaction.atomic
     def create(self, validated_data):
+        print(2)
         category = validated_data.pop('category')
         validated_data['category_id'] = category['id']
         return super(ArticlesSerializer, self).create(validated_data)
