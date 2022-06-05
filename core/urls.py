@@ -30,5 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc-schema-ui'),
-    path('v1/', include((api_urlpatterns_v1, 'v1')))
+    path('v1/', include((api_urlpatterns_v1, 'v1'))),
+    path('')
 ]
