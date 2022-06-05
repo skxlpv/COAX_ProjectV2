@@ -47,13 +47,13 @@ class EditArticleSerializer(serializers.ModelSerializer):
 
 class ArticlesSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
-    hospital_name = HospitalSerializer(many=False, read_only=False)
+    hospital = HospitalSerializer(read_only=True)
     category = CategoriesSerializer()
 
     class Meta:
         model = Articles
-        fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital_name')
-        read_only_fields = ('id', 'hospital_name')
+        fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
+        read_only_fields = ('id',)
 
     def validate_category(self, value):
         try:

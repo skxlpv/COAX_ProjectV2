@@ -28,8 +28,8 @@ class ArticlesViewSet(mixins.ListModelMixin,
 
     @permission_classes(IsAuthenticated)
     def get_queryset(self):
-        return Articles.objects.all()
-        # return Articles.objects.filter(hospital=self.request.user.hospital)
+        # return Articles.objects.all()
+        return Articles.objects.filter(hospital=self.request.user.hospital)
 
     @permission_classes(IsAuthenticated & HasArticleUpdate)
     @action(methods=['DELETE'], detail=True, url_path='delete', url_name='delete')
