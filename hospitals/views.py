@@ -11,6 +11,11 @@ class CitiesViewSet(mixins.ListModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
                     GenericViewSet):
+    """
+    Cities
+
+    Cities View Set
+    """
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [IsAuthenticated, ]
@@ -21,6 +26,12 @@ class HospitalsViewSet(mixins.ListModelMixin,
                        mixins.UpdateModelMixin,
                        mixins.DestroyModelMixin,
                        GenericViewSet):
+    """
+    Hospitals
+
+    Hospitals View Set
+    """
+
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
     permission_classes = [IsAuthenticated, ]
@@ -31,6 +42,11 @@ class DepartmentsView(mixins.ListModelMixin,
                       mixins.UpdateModelMixin,
                       mixins.DestroyModelMixin,
                       GenericViewSet):
+    """
+    Departments
+
+    Departments View Set
+    """
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsAuthenticated, ]
