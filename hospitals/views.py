@@ -6,22 +6,31 @@ from hospitals.models import City, Hospital, Department
 from hospitals.serializers import HospitalSerializer, CitySerializer, DepartmentSerializer
 
 
-class CitiesListViewSet(mixins.ListModelMixin,
-                        GenericViewSet):
+class CitiesViewSet(mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    GenericViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [IsAuthenticated, ]
 
 
-class HospitalsListViewSet(mixins.ListModelMixin,
-                           GenericViewSet):
+class HospitalsViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.UpdateModelMixin,
+                       mixins.DestroyModelMixin,
+                       GenericViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
     permission_classes = [IsAuthenticated, ]
 
 
-class DepartmentsListView(mixins.ListModelMixin,
-                          GenericViewSet):
+class DepartmentsView(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.DestroyModelMixin,
+                      GenericViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsAuthenticated, ]
