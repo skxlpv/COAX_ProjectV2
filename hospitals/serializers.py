@@ -9,19 +9,17 @@ class DepartmentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'department_name')
 
 
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ('id', 'city', 'region')
+        read_only_fields = ('id', )
+
+
 class HospitalSerializer(serializers.ModelSerializer):
+    region = CitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Hospital
         fields = ('id', 'hospital_name', 'region')
         read_only_fields = ('id', )
-
-
-class CitySerializer(serializers.ModelSerializer):
-    hospital_name = HospitalSerializer(many=False, read_only=True)
-
-    class Meta:
-        model = City
-        fields = ('id', 'city_name',
-                  'region_name', 'hospital_name')
-        read_only_fields = ('id', 'hospital_name')

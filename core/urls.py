@@ -23,7 +23,7 @@ api_urlpatterns_v1 = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('articles/', include('articles.urls'), name='articles'),
     path('management/', include('management.urls'), name='management'),
-    path('cities/', include('hospitals.urls'), name='cities'),
+    path('hospitals/', include('hospitals.urls'), name='hospitals'),
 ]
 
 urlpatterns = [
