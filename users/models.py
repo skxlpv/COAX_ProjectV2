@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.conf import settings
-from hospitals.models import Hospitals
+from hospitals.models import Hospital
 from django.utils.translation import gettext_lazy as _
 
 
@@ -49,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    hospital = models.ForeignKey(Hospitals, on_delete=models.CASCADE, blank=True, null=True)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, blank=True, null=True)
 
     LEADER = "LD"
     HELPER = "HP"

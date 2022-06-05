@@ -1,11 +1,11 @@
 from django.db import models
 
-from hospitals.models import Departments
+from hospitals.models import Department
 
 
 class Category(models.Model):
     category_name = models.CharField(max_length=50, unique=True, verbose_name='Category title')
-    department = models.ForeignKey(Departments, related_name='categories',
+    department = models.ForeignKey(Department, related_name='categories',
                                    on_delete=models.CASCADE, default=1,
                                    verbose_name='Department')
 

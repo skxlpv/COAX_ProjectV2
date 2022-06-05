@@ -21,7 +21,7 @@
       <excludeFolder url="file://$MODULE_DIR$/articles/migrations" />
       <excludeFolder url="file://$MODULE_DIR$/hospitals/migrations" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (med_site_rest)" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">

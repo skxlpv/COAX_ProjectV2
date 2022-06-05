@@ -2,40 +2,43 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Cities(models.Model):
-    city = models.CharField(max_length=255)
-    region = models.CharField(max_length=255)
+class Department(models.Model):
+    department_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.city}, {self.region}"
+        return f"{self.department_name}"
 
     class Meta:
-        ordering = ('-region', )
-        verbose_name = _('City')
-        verbose_name_plural = _('Cities')
+        ordering = ('-department_name',)
+        verbose_name = _('Departament')
+        verbose_name_plural = _('Departments')
 
 
-class Hospitals(models.Model):
-    name = models.CharField(max_length=255)
-    region = models.ForeignKey(Cities, on_delete=models.CASCADE)
+class Hospital(models.Model):
+    hospital_name = models.CharField(max_length=255)
+    hospital_departments = models.ManyToManyField(Department, related_name='departments')
 
     def __str__(self):
-        return f"{self.name}, {self.region.city}"
+        return f"{self.hospital_name}"
 
     class Meta:
-        ordering = ('-region', )
+        ordering = ('-hospital_name', )
         verbose_name = _('Hospital')
         verbose_name_plural = _('Hospitals')
 
 
-class Departments(models.Model):
-    name = models.CharField(max_length=255)
-    hospital_name = models.ForeignKey(Hospitals, on_delete=models.CASCADE)
+class City(models.Model):
+    city_name = models.CharField(max_length=255)
+    region_name = models.CharField(max_length=255)
+    hospital_name = models.ForeignKey(Hospital, related_name='hospital', on_delete=models.CASCADE, default=1)
+    #hospital_departments = models.ManyToManyField(Department, related_name='city_departments')
+    # department_name = models.ForeignKey(Department, related_name='city_department',
+    #                                     on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return f"{self.name}, {self.hospital_name}"
+        return f"{self.city_name}, {self.region_name}"
 
     class Meta:
-        ordering = ('-name',)
-        verbose_name = _('Departament')
-        verbose_name_plural = _('Departments')
+        ordering = ('-region_name', )
+        verbose_name = _('City')
+        verbose_name_plural = _('Cities')
