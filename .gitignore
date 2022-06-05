@@ -138,6 +138,7 @@ GitHub.sublime-settings
 
 # HTTP files #
 *.http
+http-client.private.env.json
 
 # Migrations #
 migrations/

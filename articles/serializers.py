@@ -1,9 +1,7 @@
 from django.db import transaction
-from requests import Response
 from rest_framework import serializers
 from rest_framework.fields import Field
 
-from hospitals.models import Hospitals
 from hospitals.serializers import HospitalSerializer
 from users.serializers import AuthorSerializer
 from .models import Articles, Categories
@@ -22,12 +20,29 @@ class CategoriesSerializer(serializers.ModelSerializer):
         read_only_fields = ('name',)
 
 
-# def validate_category(self, value):
-#     try:
-#         Categories.objects.get(id=value["id"])
-#     except Exception as e:
-#         raise serializers.ValidationError('No such category')
-#     return value
+class EditArticleSerializer(serializers.ModelSerializer):
+    category = CategoriesSerializer()
+
+    class Meta:
+        model = Articles
+        fields = ('id', 'title', 'excerpt', 'text', 'category', 'status')
+        read_only_fields = ('id',)
+
+    def validate_category(self, value):
+        try:
+            Categories.objects.get(id=value["id"])
+        except Exception as e:
+            raise serializers.ValidationError('No such category')
+        return value
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.excerpt = validated_data.get('excerpt', instance.excerpt)
+        instance.text = validated_data.get('text', instance.text)
+        instance.status = validated_data.get('status', instance.status)
+        instance.category = Categories.objects.get(id=validated_data['category']['id'])
+        instance.save()
+        return instance
 
 
 class ArticlesSerializer(serializers.ModelSerializer):
@@ -37,18 +52,18 @@ class ArticlesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Articles
-        # fields = '__all__'
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
         read_only_fields = ('id',)
 
     def validate_category(self, value):
-        if value['id'] not in Categories.objects.all().values_list('id', flat=True):
+        try:
+            Categories.objects.get(id=value["id"])
+        except Exception as e:
             raise serializers.ValidationError('No such category')
         return value
 
     @transaction.atomic
     def create(self, validated_data):
-        print(2)
         category = validated_data.pop('category')
         validated_data['category_id'] = category['id']
         return super(ArticlesSerializer, self).create(validated_data)

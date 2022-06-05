@@ -66,11 +66,14 @@ class IsWriter(BasePermission):
 
 
 # for post edit, checks if it's the same author edits their's post
-class IsSameAuthor(BasePermission):
+class HasArticleUpdate(BasePermission):
     message = "You're not the author of this post"
 
-    def has_object_permission(self, request, obj, view):
-        if request.method in SAFE_METHODS:
-            return True
+    def has_object_permission(self, request, view, obj):
+        if request.method in ('PUT', 'PATCH', 'DELETE'):  # if view.action in ('update', 'partial_update', 'delete')
+            print(request.user)
+            if obj.author == request.user:
+                return True
+            return False
 
-        return obj.author == request.user
+        return True
