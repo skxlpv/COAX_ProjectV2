@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from hospitals.models import Hospitals
+from hospitals.models import Hospital
 from users.models import User
 
 
@@ -37,8 +37,8 @@ class Articles(models.Model):
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
         User, to_field='email', on_delete=models.CASCADE, default='')
-    hospital = models.ForeignKey(
-        Hospitals, on_delete=models.CASCADE, default=''
+    hospital_name = models.ForeignKey(
+        Hospital, on_delete=models.CASCADE, default=''
     )
     status = models.CharField(
         max_length=10, choices=options, default='review')
