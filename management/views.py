@@ -10,6 +10,11 @@ from management.serializers import ItemSerializer, CategorySerializer
 class ItemViewSet(mixins.RetrieveModelMixin,
                   mixins.ListModelMixin,
                   GenericViewSet):
+    """
+    Item
+
+    Item View Set
+    """
 
     permission_classes = [IsAuthenticated, ]
     queryset = Item.objects.all()
@@ -24,6 +29,11 @@ class ItemViewSet(mixins.RetrieveModelMixin,
 class CategoryViewSet(mixins.RetrieveModelMixin,
                       mixins.ListModelMixin,
                       GenericViewSet):
+    """
+    Category
+
+    Category View Set
+    """
 
     permission_classes = [IsAuthenticated, ]
     queryset = Category.objects.all()
