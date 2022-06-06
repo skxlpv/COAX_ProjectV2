@@ -56,13 +56,9 @@ class IsWriter(BasePermission):
     message = "Sorry, you aren't able to write posts."
 
     def has_permission(self, request, view):
-        # if request.method in SAFE_METHODS:
-        #     return True
-
-        is_writer = request.user.is_writer
-
-        if is_writer:
-            return bool(request.user)
+        if view.action == 'create':
+            return request.user.is_writer
+        return True
 
 
 # for post edit, checks if it's the same author edits their's post
@@ -70,8 +66,8 @@ class HasArticleUpdate(BasePermission):
     message = "You're not the author of this post"
 
     def has_object_permission(self, request, view, obj):
-        if request.method in ('PUT', 'PATCH', 'DELETE'):  # if view.action in ('update', 'partial_update', 'delete')
-            print(request.user)
+        if request.method in ('PUT', 'PATCH', 'DELETE'):
+        # if view.action in ('update', 'partial_update', 'delete'):
             if obj.author == request.user:
                 return True
             return False

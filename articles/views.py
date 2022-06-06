@@ -5,53 +5,37 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from api.permissions import IsWriter, IsLeader, IsHelper, IsCommon, HasArticleUpdate  # all the available permissions
-from articles.models import Articles
+from articles.models import Articles, Categories
 from articles.serializers import ArticlesSerializer, EditArticleSerializer
 from users.models import User
 
 
-class AddArticleViewSet(mixins.CreateModelMixin,
-                        GenericViewSet):
-    permission_classes = (IsAuthenticated & IsWriter,)
-    serializer_class = ArticlesSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user, hospital=self.request.user.hospital)
+# class AddArticleViewSet(mixins.CreateModelMixin,
+#                         GenericViewSet):
+#     permission_classes = (IsAuthenticated & IsWriter)
+#     serializer_class = ArticlesSerializer
+#
+#
 
 
 class ArticlesViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.CreateModelMixin,
                       GenericViewSet):
 
     serializer_class = ArticlesSerializer
+    permission_classes = (IsAuthenticated, HasArticleUpdate, IsWriter)
 
-
-    @permission_classes(IsAuthenticated)
     def get_queryset(self):
-        # return Articles.objects.all()
-        return Articles.objects.filter(hospital=self.request.user.hospital)
+        return Articles.objects.all()
+        # return Articles.objects.filter(hospital=self.request.user.hospital)
 
-    @permission_classes(IsAuthenticated & HasArticleUpdate)
-    @action(methods=['DELETE'], detail=True, url_path='delete', url_name='delete')
-    def delete(self, request, pk):
-        article = Articles.objects.get(id=pk)
-        article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, hospital=self.request.user.hospital)
 
-    @permission_classes(IsAuthenticated & HasArticleUpdate)
-    @action(methods=['PUT', 'PATCH'], detail=True, url_path='edit', url_name='edit')
-    def edit(self, request, pk):
-        # print(IsSameAuthor.message)
-        article = Articles.objects.get(id=pk)
-        serializer = EditArticleSerializer(article, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_update(self, serializer):
+        category = Categories.objects.get(id=self.request.data['category']['id'])
+        serializer.save(category=category)
 
-
-# class EditArticleViewSet(mixins.UpdateModelMixin,
-#                          GenericViewSet):
-#     permission_classes(IsAuthenticated & HasArticleUpdate, )
-#     queryset = Articles
-#     serializer_class = EditArticleSerializer

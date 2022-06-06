@@ -6,6 +6,7 @@ from hospitals.serializers import HospitalSerializer
 from users.serializers import AuthorSerializer
 from .models import Articles, Categories
 
+
 Field.default_error_messages = {
     'category': "No such category",
 }
@@ -27,22 +28,6 @@ class EditArticleSerializer(serializers.ModelSerializer):
         model = Articles
         fields = ('id', 'title', 'excerpt', 'text', 'category', 'status')
         read_only_fields = ('id',)
-
-    def validate_category(self, value):
-        try:
-            Categories.objects.get(id=value["id"])
-        except Exception as e:
-            raise serializers.ValidationError('No such category')
-        return value
-
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.excerpt = validated_data.get('excerpt', instance.excerpt)
-        instance.text = validated_data.get('text', instance.text)
-        instance.status = validated_data.get('status', instance.status)
-        instance.category = Categories.objects.get(id=validated_data['category']['id'])
-        instance.save()
-        return instance
 
 
 class ArticlesSerializer(serializers.ModelSerializer):
