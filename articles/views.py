@@ -4,9 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 from articles import serializers as ser
 from api.permissions import IsWriter, IsLeader, IsHelper, IsCommon, HasArticleUpdate  # all the available permissions
-from articles.models import Articles, Categories
+from articles.models import Article
 from articles.serializers import ArticlesSerializer, EditArticleSerializer
 
+# @action(methods=['PUT', 'PATCH'], detail=True, url_path='edit', url_name='edit')
 
 class ArticlesViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
@@ -57,8 +58,8 @@ class ArticlesViewSet(mixins.ListModelMixin,
         return ser.ArticlesSerializer
 
     def get_queryset(self):
-        # return Articles.objects.all()
-        return Articles.objects.filter(hospital=self.request.user.hospital)
+        # return Article.objects.all()
+        return Article.objects.filter(hospital=self.request.user.hospital)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, hospital=self.request.user.hospital)

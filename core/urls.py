@@ -21,7 +21,7 @@ api_urlpatterns_v1 = [
     path('api/', include('api.urls')),
     path('api/user/', include('users.urls', namespace='users')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('articles/', include('articles.urls'), name='articles'),
+    path('article/', include('article.urls'), name='articles'),
     path('management/', include('management.urls'), name='management'),
     path('cities/', include('hospitals.urls'), name='cities'),
 ]
@@ -29,6 +29,7 @@ api_urlpatterns_v1 = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc-schema-ui'),
-    path('v1/', include((api_urlpatterns_v1, 'v1')))
+    path('doc/', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc-schema-ui'),
+    path('v1/', include((api_urlpatterns_v1, 'v1'))),
+    path('')
 ]
