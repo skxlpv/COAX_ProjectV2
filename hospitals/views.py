@@ -11,8 +11,6 @@ class CitiesViewSet(mixins.ListModelMixin,
                     GenericViewSet):
     """
     Cities
-
-    Cities View Set
     """
     queryset = City.objects.all()
     serializer_class = CitySerializer
@@ -24,8 +22,6 @@ class HospitalsViewSet(mixins.ListModelMixin,
                        GenericViewSet):
     """
     Hospitals
-
-    Hospitals View Set
     """
 
     queryset = Hospital.objects.all()
@@ -38,8 +34,6 @@ class DepartmentsView(mixins.ListModelMixin,
                       GenericViewSet):
     """
     Departments
-
-    Departments View Set
     """
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
