@@ -9,6 +9,7 @@ from management.serializers import ItemSerializer, CategorySerializer
 
 class ItemViewSet(mixins.RetrieveModelMixin,
                   mixins.ListModelMixin,
+                  mixins.UpdateModelMixin,
                   GenericViewSet):
     """
     Item

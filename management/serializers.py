@@ -8,7 +8,8 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ('id', 'category_name', 'name',
                   'description', 'quantity', 'price_of_one')
-        read_only_fields = ('category_name',)
+        read_only_fields = ('category_name', 'name',
+                            'description', 'price_of_one')
 
     def update(self, instance, validated_data):
         instance.quantity = validated_data['quantity']
