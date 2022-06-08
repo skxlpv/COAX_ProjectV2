@@ -12,8 +12,8 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
-        verbose_name_plural = 'Category'
-        verbose_name = _('Category1')
+        verbose_name_plural = 'Categories'
+        verbose_name = _('Category') #fkfeveg
 
     def __str__(self):
         return self.name
@@ -52,4 +52,3 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
-# але ці тупі руки
