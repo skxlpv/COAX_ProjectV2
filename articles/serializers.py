@@ -19,34 +19,17 @@ class CategoriesSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'name',)
 
 
-class EditArticleSerializer(serializers.ModelSerializer):
-    category = CategoriesSerializer(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all().values_list('id', flat=True),
-        write_only=True
-    )
-
-    class Meta:
-        model = Article
-        fields = ('id', 'title', 'excerpt', 'text', 'category', 'category_id', 'status')
-        read_only_fields = ('id',)
-
-
 class ArticlesSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     hospital = HospitalSerializer(read_only=True)
     category = CategoriesSerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all().values_list('id', flat=True),
-        write_only=True
+        queryset=Category.objects.all(),
+        write_only=True,
+        source='category'
     )
 
     class Meta:
         model = Article
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'category_id', 'author', 'hospital')
         read_only_fields = ('id',)
-
-    @transaction.atomic
-    def create(self, validated_data):
-        validated_data['category_id'] = validated_data.pop('category_id')
-        return super(ArticlesSerializer, self).create(validated_data)
