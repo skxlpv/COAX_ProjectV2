@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from api.permissions import IsWriter, IsLeader, IsHelper, IsCommon, HasArticleUpdate  # all the available permissions
-from articles.models import Articles
+from articles.models import Article
 from articles.serializers import ArticlesSerializer, EditArticleSerializer
 from users.models import User
 
@@ -29,12 +29,12 @@ class ArticlesViewSet(mixins.ListModelMixin,
     @permission_classes(IsAuthenticated)
     def get_queryset(self):
         # return Articles.objects.all()
-        return Articles.objects.filter(hospital=self.request.user.hospital)
+        return Article.objects.filter(hospital=self.request.user.hospital)
 
     @permission_classes(IsAuthenticated & HasArticleUpdate)
     @action(methods=['DELETE'], detail=True, url_path='delete', url_name='delete')
     def delete(self, request, pk):
-        article = Articles.objects.get(id=pk)
+        article = Article.objects.get(id=pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -42,7 +42,7 @@ class ArticlesViewSet(mixins.ListModelMixin,
     @action(methods=['PUT', 'PATCH'], detail=True, url_path='edit', url_name='edit')
     def edit(self, request, pk):
         # print(IsSameAuthor.message)
-        article = Articles.objects.get(id=pk)
+        article = Article.objects.get(id=pk)
         serializer = EditArticleSerializer(article, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -53,5 +53,5 @@ class ArticlesViewSet(mixins.ListModelMixin,
 # class EditArticleViewSet(mixins.UpdateModelMixin,
 #                          GenericViewSet):
 #     permission_classes(IsAuthenticated & HasArticleUpdate, )
-#     queryset = Articles
+#     queryset = Article
 #     serializer_class = EditArticleSerializer

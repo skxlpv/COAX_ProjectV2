@@ -4,7 +4,7 @@ from rest_framework.fields import Field
 
 from hospitals.serializers import HospitalSerializer
 from users.serializers import AuthorSerializer
-from .models import Articles, Categories
+from .models import Article, Category
 
 Field.default_error_messages = {
     'category': "No such category",
@@ -15,7 +15,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
 
     class Meta:
-        model = Categories
+        model = Category
         fields = ('id', 'name')
         read_only_fields = ('name',)
 
@@ -24,13 +24,13 @@ class EditArticleSerializer(serializers.ModelSerializer):
     category = CategoriesSerializer()
 
     class Meta:
-        model = Articles
+        model = Article
         fields = ('id', 'title', 'excerpt', 'text', 'category', 'status')
         read_only_fields = ('id',)
 
     def validate_category(self, value):
         try:
-            Categories.objects.get(id=value["id"])
+            Category.objects.get(id=value["id"])
         except Exception as e:
             raise serializers.ValidationError('No such category')
         return value
@@ -40,7 +40,7 @@ class EditArticleSerializer(serializers.ModelSerializer):
         instance.excerpt = validated_data.get('excerpt', instance.excerpt)
         instance.text = validated_data.get('text', instance.text)
         instance.status = validated_data.get('status', instance.status)
-        instance.category = Categories.objects.get(id=validated_data['category']['id'])
+        instance.category = Category.objects.get(id=validated_data['category']['id'])
         instance.save()
         return instance
 
@@ -51,13 +51,13 @@ class ArticlesSerializer(serializers.ModelSerializer):
     category = CategoriesSerializer()
 
     class Meta:
-        model = Articles
+        model = Article
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author', 'hospital')
         read_only_fields = ('id',)
 
     def validate_category(self, value):
         try:
-            Categories.objects.get(id=value["id"])
+            Category.objects.get(id=value["id"])
         except Exception as e:
             raise serializers.ValidationError('No such category')
         return value

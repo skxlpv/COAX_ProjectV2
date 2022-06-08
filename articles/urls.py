@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 from articles import views
 
 router = SimpleRouter(trailing_slash=True)
-router.register('article', views.ArticlesViewSet, basename='articles')
+router.register('article', views.ArticlesViewSet, basename='articles') #? i don`t sure that i must rename something in this file
 router.register('create', views.AddArticleViewSet, basename='createArticle')
 # router.register('edit', views.EditArticleViewSet, basename='editArticle')
 urlpatterns = [

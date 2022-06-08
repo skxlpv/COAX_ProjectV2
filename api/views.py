@@ -3,7 +3,7 @@
 # from rest_framework.response import Response
 # from rest_framework.views import APIView
 #
-# from articles.models import Articles
+# from articles.models import Article
 # from .serializers import ArticleSerializer
 #
 #
@@ -18,11 +18,11 @@
 #
 # class PostList(generics.ListCreateAPIView):
 #     permission_classes = [DjangoModelPermissions]
-#     queryset = Articles.postobjects.all()
+#     queryset = Article.postobjects.all()
 #     serializer_class = ArticleSerializer
 #
 #
 # class PostDetail(generics.RetrieveDestroyAPIView, TheOnlyAuthorPermission):
 #     permission_classes = [TheOnlyAuthorPermission]
-#     queryset = Articles.objects.all()
+#     queryset = Article.objects.all()
 #     serializer_class = ArticleSerializer
