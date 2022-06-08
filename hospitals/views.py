@@ -8,8 +8,6 @@ from hospitals.serializers import HospitalSerializer, CitySerializer, Department
 
 class CitiesViewSet(mixins.ListModelMixin,
                     mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.DestroyModelMixin,
                     GenericViewSet):
     """
     Cities
@@ -23,8 +21,6 @@ class CitiesViewSet(mixins.ListModelMixin,
 
 class HospitalsViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
-                       mixins.UpdateModelMixin,
-                       mixins.DestroyModelMixin,
                        GenericViewSet):
     """
     Hospitals
@@ -39,8 +35,6 @@ class HospitalsViewSet(mixins.ListModelMixin,
 
 class DepartmentsView(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin,
-                      mixins.DestroyModelMixin,
                       GenericViewSet):
     """
     Departments
