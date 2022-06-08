@@ -5,5 +5,5 @@
 #
 # class ArticleSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = Articles
+#         model = Article
 #         fields = ('id', 'category', 'title', 'excerpt', 'text', 'author', 'hospital', 'status')
