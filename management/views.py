@@ -20,10 +20,10 @@ class ItemViewSet(mixins.RetrieveModelMixin,
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        query_items = Item.objects.filter(name__istartswith=kwargs['pk'])
-        serializer = ItemSerializer(query_items, many=True)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     query_items = Item.objects.filter(name__istartswith=kwargs['pk'])
+    #     serializer = ItemSerializer(query_items, many=True)
+    #     return Response(serializer.data)
 
 
 class CategoryViewSet(mixins.RetrieveModelMixin,
@@ -39,7 +39,7 @@ class CategoryViewSet(mixins.RetrieveModelMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        query_categories = Category.objects.filter(category_name__istartswith=kwargs['pk'])
-        serializer = CategorySerializer(query_categories, many=True)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     query_categories = Category.objects.filter(category_name__istartswith=kwargs['pk'])
+    #     serializer = CategorySerializer(query_categories, many=True)
+    #     return Response(serializer.data)

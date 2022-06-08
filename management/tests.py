@@ -2,32 +2,25 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import AccessToken
+from mixer.backend.django import mixer
 
-from users.models import User
+from api.tests import BaseAPITest
+from hospitals.models import Department, Hospital
+from management.models import Item
 
 
-class TestItemViewSet(APITestCase):
+class TestItemViewSet(BaseAPITest):
 
     def setUp(self):
-        client = APIClient()
+        self.department = mixer.blend(Department)
+        self.item = mixer.blend(Item)
 
-        self.user = User.objects.create_superuser(email='test@test.com', password='1234512345',
-                                                  first_name='test', last_name='test')
+        self.user = self.create_and_login()
 
-    def test_list_items(self):
-        resp = self.client.post('/v1/api/user/token/',
-                                {'email': 'test@test.com', 'password': '1234512345'})
-
+    def test_list_items_GET(self):
+        resp = self.client.get('/v1/management/items/', )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertTrue('access' in resp.data)
-        self.assertTrue('refresh' in resp.data)
 
-        self.user.is_active = True
-        self.user.save()
-
-        token = AccessToken.for_user(self.user)
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"{api_settings.AUTH_HEADER_TYPES[0]} {token}"
-        )
-        resp = self.client.get('/v1/management/items/',)
+    def test_detail_item_GET(self):
+        resp = self.client.get('/v1/management/items/1/', )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
