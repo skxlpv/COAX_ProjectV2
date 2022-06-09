@@ -43,3 +43,6 @@ class BaseAPITest(APITestCase):
             HTTP_AUTHORIZATION=f"{api_settings.AUTH_HEADER_TYPES[0]} {token}",
             **additional_headers
         )
+
+    def logout(self, **additional_headers):
+        self.client.credentials(**additional_headers)

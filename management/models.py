@@ -29,8 +29,8 @@ class Item(models.Model):
     description = models.CharField(max_length=250,
                                    verbose_name='Item description',
                                    default='', null=True)
-    quantity = models.IntegerField(default=1,
-                                   verbose_name='Quantity')
+    quantity = models.PositiveIntegerField(default=1,
+                                           verbose_name='Quantity')
     price_of_one = models.DecimalField(default=1,
                                        verbose_name='Item price USD',
                                        decimal_places=2,

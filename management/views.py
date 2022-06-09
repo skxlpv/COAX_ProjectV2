@@ -7,9 +7,10 @@ from management.models import Item, Category
 from management.serializers import ItemSerializer, CategorySerializer
 
 
-class ItemViewSet(mixins.RetrieveModelMixin,
-                  mixins.ListModelMixin,
+class ItemViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
+                  mixins.CreateModelMixin,
                   GenericViewSet):
     """
     Item
@@ -27,9 +28,10 @@ class ItemViewSet(mixins.RetrieveModelMixin,
     #     return Response(serializer.data)
 
 
-class CategoryViewSet(mixins.RetrieveModelMixin,
-                      mixins.ListModelMixin,
+class CategoryViewSet(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
                       mixins.UpdateModelMixin,
+                      mixins.CreateModelMixin,
                       GenericViewSet):
     """
     Category
