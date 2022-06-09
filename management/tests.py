@@ -1,8 +1,5 @@
-from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
-from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.tokens import AccessToken
 from mixer.backend.django import mixer
+from rest_framework import status
 
 from api.tests import BaseAPITest
 from hospitals.models import Department, Hospital

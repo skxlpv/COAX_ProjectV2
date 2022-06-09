@@ -29,6 +29,7 @@ class ItemViewSet(mixins.RetrieveModelMixin,
 
 class CategoryViewSet(mixins.RetrieveModelMixin,
                       mixins.ListModelMixin,
+                      mixins.UpdateModelMixin,
                       GenericViewSet):
     """
     Category
