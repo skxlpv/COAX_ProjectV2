@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, first_name, last_name):
+    def create_superuser(self, email, password, first_name, last_name, **other_fields):
 
         if not email:
             raise ValueError(_('You must provide an email address'))
@@ -33,6 +33,7 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
+            **other_fields  # had to add other field in order to setup user for the tests
         )
 
         user.set_password(password)
@@ -68,11 +69,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_writer = models.BooleanField(default=True) #NEW
+    is_writer = models.BooleanField(default=True)  # NEW
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
 
     def __str__(self):
         return self.email
-
