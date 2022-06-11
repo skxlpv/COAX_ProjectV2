@@ -35,23 +35,31 @@ class TestItemViewSet(BaseAPITest):
             "price_of_one": "40.00"
         }
 
-        self.category_data = {
-            "category_name": "dopsfoposf",
+        self.item_data = {
+            "category_name": 1,
+            "name": "Some Reanimation Item",
+            "description": "Some Description",
+            "quantity": 3000,
+            "price_of_one": "14.00"
         }
 
-    # GET list of all the items
     def test_list_items_GET(self):
         resp = self.client.get('/v1/management/items/', )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-    # GET detailed info about a single item
     def test_detail_item_GET(self):
         resp = self.client.get('/v1/management/items/1/', )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-    # PATCH item's quantity, no matter what other data was passed
+    def test_create_item_POST(self):
+        resp = self.client.post('/v1/management/items/', self.item_data)
+        self.assertEqual(resp.status_code, 201)
+
+    def test_create_item_no_required_data_POST(self):
+        resp = self.client.post('/v1/management/items/', self.item_data)
+        self.assertEqual(resp.status_code, 400)
+
     def test_update_item_PATCH(self):
-        # PASS the valid data in the PATCH request
         resp = self.client.patch('/v1/management/items/1/', data=self.patch_data)
 
         self.assertEqual(resp.status_code, 200)
@@ -61,7 +69,6 @@ class TestItemViewSet(BaseAPITest):
         self.item.refresh_from_db()
         self.assertEqual(self.item.quantity, self.patch_data['quantity'])
 
-    # PATCH invalid data without the required 'quantity' field
     def test_update_validation_error_PATCH(self):
         self.patch_data['quantity'] = None
         resp = self.client.patch('/v1/management/items/1/', data=self.invalid_patch_data)
@@ -79,3 +86,20 @@ class TestItemViewSet(BaseAPITest):
 
         resp = self.client.patch('/v1/management/items/1/', data=self.patch_data)
         self.assertEqual(resp.status_code, 403)
+
+        resp = self.client.get('/v1/management/categories/')
+        self.assertEqual(resp.status_code, 403)
+
+        resp = self.client.get('/v1/management/categories/1/')
+        self.assertEqual(resp.status_code, 403)
+
+#############################################################
+
+    def test_list_category_GET(self):
+        resp = self.client.get('/v1/management/categories/')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_detail_category_GET(self):
+        resp = self.client.get('/v1/management/categories/1/')
+        self.assertEqual(resp.status_code, 200)
+
