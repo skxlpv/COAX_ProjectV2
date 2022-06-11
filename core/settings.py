@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.StandardResults',
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.StandardResults',
 }
 
 SIMPLE_JWT = {
