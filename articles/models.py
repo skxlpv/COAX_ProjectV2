@@ -8,19 +8,19 @@ from hospitals.models import Hospital
 from users.models import User
 
 
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
-        verbose_name = _('Category')
+        verbose_name = _('Category') #fkfeveg
 
     def __str__(self):
         return self.name
 
 
-class Articles(models.Model):
-    class ArticlesObjects(models.Manager):
+class Article(models.Model):
+    class ArticleObjects(models.Manager):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
 
@@ -30,7 +30,7 @@ class Articles(models.Model):
     )
 
     category = models.ForeignKey(
-        Categories, on_delete=models.CASCADE, default=1)
+        Category, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=250)
     excerpt = models.TextField()
     text = models.TextField()
@@ -43,7 +43,7 @@ class Articles(models.Model):
     status = models.CharField(
         max_length=10, choices=options, default='review')
     objects = models.Manager()
-    postobjects = ArticlesObjects()
+    postobjects = ArticleObjects()
 
     class Meta:
         verbose_name_plural = _('Articles')

@@ -5,9 +5,9 @@ from rest_framework import serializers
 
 from articles import models
 
-admin.site.register(models.Categories)
+admin.site.register(models.Category)
 
 
-@admin.register(models.Articles)
+@admin.register(models.Article)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'author',)
