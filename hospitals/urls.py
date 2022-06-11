@@ -1,10 +1,13 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from hospitals.views import CitiesListViewSet, HospitalsListViewSet, DepartmentsListView
+from hospitals.views import CitiesViewSet, HospitalsViewSet, DepartmentsView
+
+router = SimpleRouter()
+router.register(r'', HospitalsViewSet, basename='hospital-list')
+router.register(r'city', CitiesViewSet, basename='city-list')
+router.register(r'department', DepartmentsView, basename='department-list')
 
 urlpatterns = [
-    path('', CitiesListViewSet.as_view({'get': 'list'}), name='cities'),
-    path('hospitals/', HospitalsListViewSet.as_view({'get': 'list'}), name='hospitals'),
-    path('hospitals/departments', DepartmentsListView.as_view({'get': 'list'}), name='hospitals'),
-    # path('new-hospital/', CitiesViewSet.as_view({'post': 'create'}), name='hospital'),
-]
+
+] + router.urls
