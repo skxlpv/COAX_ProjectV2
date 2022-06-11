@@ -20,6 +20,7 @@ schema_view = get_schema_view(
 api_urlpatterns_v1 = [
     path('api/', include('api.urls')),
     path('api/user/', include('users.urls', namespace='users')),
+    path('users/', include('users.urls', namespace='users')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('articles/', include('articles.urls'), name='articles'),
     path('management/', include('management.urls'), name='management'),
