@@ -15,7 +15,7 @@ class TestItemViewSet(BaseAPITest):
         self.item = mixer.blend(Item)
         self.category = mixer.blend(Category)
 
-        self.user = self.create_user_and_login()
+        self.user = self.create_and_login()
 
         self.patch_data = {
             "id": 2,
