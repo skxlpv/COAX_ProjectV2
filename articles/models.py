@@ -36,7 +36,7 @@ class Article(models.Model):
     text = models.TextField()
     published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
-        User, to_field='email', on_delete=models.CASCADE, default='')
+        User, on_delete=models.CASCADE, default='')
     hospital = models.ForeignKey(
         Hospital, on_delete=models.CASCADE, default=''
     )
