@@ -1,21 +1,15 @@
 from django.test import TestCase
 from django.utils import timezone
-from mixer.backend.django import mixer
 from rest_framework.test import APITestCase
 
 # Create your tests here.
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import AccessToken
 
-from hospitals.models import Hospital, City
 from users.models import User
 
 
 class BaseAPITest(APITestCase):
-
-    # def create_hospital(self, hospital_name='Test hospital', region=1):
-    #     hospital = Hospital.objects.create(hospital_name=hospital_name, region_id=region,)
-    #     return hospital
 
     def create(self, email='test@mail.com', password='test_password',
                first_name='test', last_name='test', hospital=None, is_writer=False,):
@@ -50,3 +44,6 @@ class BaseAPITest(APITestCase):
             HTTP_AUTHORIZATION=f"{api_settings.AUTH_HEADER_TYPES[0]} {token}",
             **additional_headers
         )
+
+    def logout(self, **additional_headers):
+        self.client.credentials(**additional_headers)

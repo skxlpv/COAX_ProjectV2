@@ -1,6 +1,11 @@
 from rest_framework import serializers
+from rest_framework.fields import Field
 
 from management.models import Item, Category
+
+Field.default_error_messages = {
+    'required': 'This field is required',
+}
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -8,13 +13,16 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ('id', 'category_name', 'name',
                   'description', 'quantity', 'price_of_one')
-        read_only_fields = ('category_name', 'name',
-                            'description', 'price_of_one')
+        extra_kwargs = {'quantity': {'required': True}}
 
-    def update(self, instance, validated_data):
-        instance.quantity = validated_data['quantity']
-        instance.save()
-        return instance
+    def update(self, item, validated_data):
+        quantity = self.validated_data.get('quantity')
+        if not quantity:
+            raise serializers.ValidationError('No quantity of item was given')
+
+        item.quantity = validated_data['quantity']
+        item.save()
+        return item
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -23,8 +31,4 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'category_name', 'department', 'items')
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data['name']
-        instance.save()
-        return instance
+        read_only_fields = ('department', 'items')
