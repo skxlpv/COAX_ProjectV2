@@ -33,7 +33,7 @@ class TestArticleApiView(BaseAPITest):
         resp = self.client.get(reverse('v1:articles:articles-list'))
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(len(resp.data), Article.objects.all().count())
+        self.assertEqual(len(resp.data['results']), Article.objects.filter(hospital=self.user.hospital).count())
 
     def test_detail_article(self):
         # resp = self.client.get('/v1/articles/1/', )

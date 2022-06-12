@@ -13,7 +13,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = 'Categories'
-        verbose_name = _('Category') #fkfeveg
+        verbose_name = _('Category')
 
     def __str__(self):
         return self.name
