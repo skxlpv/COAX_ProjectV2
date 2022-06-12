@@ -14,6 +14,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+        ordering = ['-id']
 
     def __str__(self):
         return f"{self.category_name}"
@@ -49,6 +50,7 @@ class Item(models.Model):
     class Meta:
         verbose_name = 'Item'
         verbose_name_plural = 'Items'
+        ordering = ['-id']
 
     def __str__(self):
         return f"{self.name}"
