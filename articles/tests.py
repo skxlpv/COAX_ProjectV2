@@ -13,20 +13,16 @@ class TestArticleApiView(BaseAPITest):
     def setUp(self):
         self.hospital = mixer.blend(Hospital)
         # self.user = self.create_and_login()
-        self.user = self.create_and_login(email="test2@test.com", hospital=self.hospital, is_writer=True)
+        self.user = self.create_and_login(hospital=self.hospital, is_writer=True)
         self.category = mixer.blend(Category)
         self.article = mixer.blend(Article, author=self.user, category=self.category, hospital=self.user.hospital)
 
-        class mydict(dict):
-            def __str__(self):
-                return json.dumps(self)
-
-        couples = [['title', 'Test'],
-                   ['text', 'test'],
-                   ['excerpt', 'test'],
-                   ['category_id', self.category.id]]
-
-        self.create_data = mydict(couples)
+        self.create_data = {
+            "title": "Test",
+            "excerpt": "Test",
+            "text": "Test",
+            "category_id": self.category.id
+        }
 
     def test_list(self):
         # resp = self.client.get('/v1/articles/', )
@@ -41,8 +37,10 @@ class TestArticleApiView(BaseAPITest):
         self.assertEqual(resp.status_code, 200)
 
     def test_create(self):
-        resp = self.client.post('/v1/articles/', data=self.create_data, content_type='application/json')
-        # resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data)
+        # resp = self.client.post('/v1/articles/', data=self.create_data, content_type='application/json')
+        # resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data,
+        #                         content_type='application/json')
+        resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data,)
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['title'], self.create_data['title'])
