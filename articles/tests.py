@@ -23,24 +23,29 @@ class TestArticleApiView(BaseAPITest):
             "text": "Test",
             "category_id": self.category.id
         }
+        self.update_data = {
+            "title": "Updated test",
+            "excerpt": "Updated test",
+            "text": "Updated test",
+            "category_id": self.category.id
+        }
+        self.partial_data = {
+            "title": "Partial test",
+            "text": "Partial test",
+        }
 
     def test_list(self):
         # resp = self.client.get('/v1/articles/', )
         resp = self.client.get(reverse('v1:articles:articles-list'))
         self.assertEqual(resp.status_code, 200)
-
         self.assertEqual(len(resp.data['results']), Article.objects.filter(hospital=self.user.hospital).count())
 
     def test_detail_article(self):
-        # resp = self.client.get('/v1/articles/1/', )
         resp = self.client.get(reverse('v1:articles:articles-detail', args=(self.article.pk,)))
         self.assertEqual(resp.status_code, 200)
 
     def test_create(self):
-        # resp = self.client.post('/v1/articles/', data=self.create_data, content_type='application/json')
-        # resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data,
-        #                         content_type='application/json')
-        resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data,)
+        resp = self.client.post(reverse('v1:articles:articles-list'), data=self.create_data, )
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['title'], self.create_data['title'])
@@ -50,3 +55,25 @@ class TestArticleApiView(BaseAPITest):
         obj = Article.objects.get(title=self.create_data['title'], author=self.user)
         self.assertEqual(obj.text, self.create_data['text'])
         self.assertEqual(obj.category, self.category)
+
+    def test_put(self):
+        resp = self.client.put(reverse('v1:articles:articles-detail', args=(self.article.id,)),
+                               data=self.update_data, )
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertEqual(resp.data['title'], self.update_data['title'])
+        self.assertEqual(resp.data['excerpt'], self.update_data['excerpt'])
+        self.assertEqual(resp.data['text'], self.update_data['text'])
+
+    def test_patch(self):
+        resp = self.client.patch(reverse('v1:articles:articles-detail', args=(self.article.id,)),
+                                 data=self.partial_data, )
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertEqual(resp.data['title'], self.partial_data['title'])
+        self.assertEqual(resp.data['excerpt'], self.article.excerpt)
+        self.assertEqual(resp.data['text'], self.partial_data['text'])
+
+    def test_delete(self):
+        resp = self.client.delete(reverse('v1:articles:articles-detail', args=(self.article.id,)))
+        self.assertEqual(resp.status_code, 204)
