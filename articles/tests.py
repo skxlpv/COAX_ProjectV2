@@ -1,6 +1,5 @@
 from django.test import TestCase
 from rest_framework.reverse import reverse
-import json
 
 from api.tests import BaseAPITest
 from mixer.backend.django import mixer
@@ -41,7 +40,7 @@ class TestArticleApiView(BaseAPITest):
         self.assertEqual(len(resp.data['results']), Article.objects.filter(hospital=self.user.hospital).count())
 
     def test_detail_article(self):
-        resp = self.client.get(reverse('v1:articles:articles-detail', args=(self.article.pk,)))
+        resp = self.client.get(reverse('v1:articles:articles-detail', args=(self.article.id,)))
         self.assertEqual(resp.status_code, 200)
 
     def test_create(self):
@@ -56,24 +55,47 @@ class TestArticleApiView(BaseAPITest):
         self.assertEqual(obj.text, self.create_data['text'])
         self.assertEqual(obj.category, self.category)
 
-    def test_put(self):
+    def test_update(self):
         resp = self.client.put(reverse('v1:articles:articles-detail', args=(self.article.id,)),
                                data=self.update_data, )
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['title'], self.update_data['title'])
-        self.assertEqual(resp.data['excerpt'], self.update_data['excerpt'])
-        self.assertEqual(resp.data['text'], self.update_data['text'])
+        # self.assertEqual(resp.data['title'], self.update_data['title'])
+        # self.assertEqual(resp.data['excerpt'], self.update_data['excerpt'])
+        # self.assertEqual(resp.data['text'], self.update_data['text'])
+        self.article.refresh_from_db()
+        self.assertEqual(self.article.title, self.update_data['title'])
+        self.assertEqual(self.article.excerpt, self.update_data['excerpt'])
+        self.assertEqual(self.article.text, self.update_data['text'])
 
-    def test_patch(self):
+    def test_partial_update(self):
         resp = self.client.patch(reverse('v1:articles:articles-detail', args=(self.article.id,)),
                                  data=self.partial_data, )
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['title'], self.partial_data['title'])
-        self.assertEqual(resp.data['excerpt'], self.article.excerpt)
-        self.assertEqual(resp.data['text'], self.partial_data['text'])
+        # self.assertEqual(resp.data['title'], self.partial_data['title'])
+        # self.assertEqual(resp.data['excerpt'], self.article.excerpt)
+        # self.assertEqual(resp.data['text'], self.partial_data['text'])
+        self.article.refresh_from_db()
+        self.assertEqual(self.article.title, self.partial_data['title'])
+        self.assertEqual(self.article.text, self.partial_data['text'])
 
     def test_delete(self):
         resp = self.client.delete(reverse('v1:articles:articles-detail', args=(self.article.id,)))
         self.assertEqual(resp.status_code, 204)
+
+    def test_update_not_author(self):
+        self.user2 = self.create(email='wrong_author@mail.com')
+        self.article.author = self.user2
+        self.article.save()
+
+        resp = self.client.put(reverse('v1:articles:articles-detail', args=(self.article.id,)),
+                               data=self.update_data, )
+        self.assertEqual(resp.status_code, 403)
+
+    def test_non_authenticated(self):
+        self.logout()
+        resp = self.client.get(reverse('v1:articles:articles-list'))
+
+        self.assertEqual(resp.status_code, 403)
+

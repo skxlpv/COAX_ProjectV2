@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'articles',
     'hospitals',
     'management',
-    
 
     'drf_yasg',
     'corsheaders',

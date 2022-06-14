@@ -12,7 +12,7 @@ from users.models import User
 class BaseAPITest(APITestCase):
 
     def create(self, email='test@mail.com', password='test_password',
-               first_name='test', last_name='test', hospital=None, is_writer=False,):
+               first_name='test', last_name='test', hospital=None, is_writer=True,):
         user = User.objects.create_user(email=email, password=password,
                                         first_name=first_name, last_name=last_name, hospital=hospital)
         user.last_login = timezone.now()
@@ -32,7 +32,7 @@ class BaseAPITest(APITestCase):
         return user
 
     def create_and_login(self, email='test@test.com', password='1234512345qq',
-                         first_name='test', last_name='test', hospital=None, is_writer=False,):
+                         first_name='test', last_name='test', hospital=None, is_writer=True,):
         user = self.create(email=email, password=password,
                            first_name=first_name, last_name=last_name, hospital=hospital, is_writer=is_writer)
         self.authorize(user)
