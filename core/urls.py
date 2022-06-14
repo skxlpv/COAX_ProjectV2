@@ -22,7 +22,7 @@ api_urlpatterns_v1 = [
     path('api/user/', include('users.urls', namespace='users')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('articles/', include(('articles.urls', 'articles'))),
-    path('management/', include('management.urls'), name='management'),
+    path('management/', include(('management.urls', 'management'))),
     path('hospitals/', include('hospitals.urls'), name='hospitals'),
 ]
 
