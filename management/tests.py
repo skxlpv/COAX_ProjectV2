@@ -1,5 +1,4 @@
 from mixer.backend.django import mixer
-from rest_framework import status
 
 from api.tests import BaseAPITest
 from hospitals.models import Department, Hospital, City
@@ -29,30 +28,28 @@ class TestItemViewSet(BaseAPITest):
             "price_of_one": "14.00"
         }
 
-    def test_list_items_GET(self):
+    def test_list(self):
         resp = self.client.get('/v1/management/items/', )
 
         self.assertEqual(resp.status_code, 200)
+        self.assertTrue(len(resp.data['results']), Item.objects.all().count())
 
-        data = resp.content.decode('utf-8')
-        self.assertTrue(data, self.item.name)  # test if such item is in a response
-
-    def test_detail_item_GET(self):
+    def test_detail(self):
         resp = self.client.get(f'/v1/management/items/{self.item.id}/', )
 
         self.assertEqual(resp.status_code, 200)
 
-        data = resp.content.decode('utf-8')
-        self.assertTrue(data, self.item.id)  # test if item with such ID is in a response
+        self.assertEqual(resp.data['id'], self.item.id)
+        self.assertTrue(len(resp.data), 1)
 
-    def test_create_item_POST(self):
+    def test_create(self):
         resp = self.client.post('/v1/management/items/', self.item_data)
         self.assertEqual(resp.status_code, 201)
 
-        data = resp.content.decode('utf-8')
-        self.assertTrue(data, self.item_data)  # test if the response data is the same with the request data
+        self.assertFalse(isinstance(resp.data, Item))
+        self.assertTrue(resp.data['name'], self.item_data['name'])
 
-    def test_create_item_no_required_data_POST(self):
+    def test_create_no_required_data(self):
         self.invalid_item_data = {
             "name": "Some Reanimation Item",
             "description": "Some Description",
@@ -60,9 +57,11 @@ class TestItemViewSet(BaseAPITest):
         }
 
         resp = self.client.post('/v1/management/items/', self.invalid_item_data)
-        self.assertEqual(resp.status_code, 400)
 
-    def test_update_item_PATCH(self):
+        self.assertEqual(resp.status_code, 400)
+        self.assertNotEquals(resp.data, self.invalid_item_data)
+
+    def test_partial_update(self):
         self.patch_data = {
             "quantity": 15,
         }
@@ -75,14 +74,14 @@ class TestItemViewSet(BaseAPITest):
         self.item.refresh_from_db()
         self.assertEqual(self.item.quantity, self.patch_data['quantity'])
 
-    def test_update_validation_error_PATCH(self):
+    def test_partial_update_validation_error(self):
         self.invalid_patch_data = {
             # NO QUANTITY
         }
 
         resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.invalid_patch_data)
 
-        self.assertEqual(resp.status_code, 400)  # test if validation fails
+        self.assertEqual(resp.status_code, 400)
 
     def test_default_after_patch(self):
         self.invalid_patch_data = {
@@ -92,8 +91,7 @@ class TestItemViewSet(BaseAPITest):
         resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.invalid_patch_data)
 
         self.item.refresh_from_db()
-        self.assertEqual(self.item.quantity, 1)  # test if the current item's quantity of the patched item
-        # is equal to the Item's default field (should be 1)
+        self.assertEqual(self.item.quantity, 1)
 
     def test_methods_when_unauthenticated(self):
         self.patch_data = {
@@ -131,16 +129,14 @@ class TestCategoryViewSet(BaseAPITest):
 
         self.user = self.create_and_login()
 
-    def test_list_category_GET(self):
+    def test_list(self):
         resp = self.client.get('/v1/management/categories/')
         self.assertEqual(resp.status_code, 200)
+        self.assertTrue(len(resp.data['results']), Item.objects.all().count())
 
-        data = resp.content.decode('utf-8')
-        self.assertTrue(data, self.category.category_name)
-
-    def test_detail_category_GET(self):
+    def test_detail(self):
         resp = self.client.get(f'/v1/management/categories/{self.category.id}/')
         self.assertEqual(resp.status_code, 200)
 
-        data = resp.content.decode('utf-8')
-        self.assertTrue(data, self.item.id)
+        self.assertEqual(resp.data['id'], self.item.id)
+        self.assertTrue(len(resp.data), 1)
