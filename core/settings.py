@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'api',
     'users',
+    'events',
     'articles',
     'hospitals',
     'management',
@@ -209,4 +210,3 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 DEFAULT_API_VERSION = 'v1'
-
