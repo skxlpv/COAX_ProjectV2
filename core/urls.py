@@ -24,6 +24,7 @@ api_urlpatterns_v1 = [
     path('articles/', include(('articles.urls', 'articles'))),
     path('management/', include(('management.urls', 'management'))),
     path('hospitals/', include('hospitals.urls'), name='hospitals'),
+    path('events/', include(('events.urls', 'events'))),
 ]
 
 urlpatterns = [
