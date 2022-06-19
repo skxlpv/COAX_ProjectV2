@@ -1,3 +1,4 @@
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
@@ -33,4 +34,5 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc-schema-ui'),
     path('v1/', include((api_urlpatterns_v1, 'v1')))
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
