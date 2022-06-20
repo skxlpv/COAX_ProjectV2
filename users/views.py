@@ -6,15 +6,14 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.models import User
-from users.serializers import UserSerializer
+from users.models import User, Profile
+from users.serializers import UserSerializer, ProfileSerializer
 
 
 class UserViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   GenericViewSet):
-
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -23,11 +22,12 @@ class ProfileViewSet(mixins.ListModelMixin,
                      mixins.UpdateModelMixin,
                      GenericViewSet):
 
-    permission_classes = (IsAuthenticated, )
-    serializer_class = UserSerializer
-
     def get_queryset(self):
-        return User.objects.filter(email=self.request.user.email)
+        return Profile.objects.filter(user=self.request.user)
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+
 
 class BlackListTokenView(APIView):
     permission_classes = [AllowAny]
