@@ -11,7 +11,6 @@ from hospitals.models import Hospital
 class TestArticleApiView(BaseAPITest):
     def setUp(self):
         self.hospital = mixer.blend(Hospital)
-        # self.user = self.create_and_login()
         self.user = self.create_and_login(hospital=self.hospital, is_writer=True)
         self.category = mixer.blend(Category)
         self.article = mixer.blend(Article, author=self.user, category=self.category, hospital=self.user.hospital)
@@ -34,7 +33,6 @@ class TestArticleApiView(BaseAPITest):
         }
 
     def test_list(self):
-        # resp = self.client.get('/v1/articles/', )
         resp = self.client.get(reverse('v1:articles:articles-list'))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.data['results']), Article.objects.filter(hospital=self.user.hospital).count())
@@ -60,9 +58,9 @@ class TestArticleApiView(BaseAPITest):
                                data=self.update_data, )
         self.assertEqual(resp.status_code, 200)
 
-        # self.assertEqual(resp.data['title'], self.update_data['title'])
-        # self.assertEqual(resp.data['excerpt'], self.update_data['excerpt'])
-        # self.assertEqual(resp.data['text'], self.update_data['text'])
+        self.assertEqual(resp.data['title'], self.update_data['title'])
+        self.assertEqual(resp.data['excerpt'], self.update_data['excerpt'])
+        self.assertEqual(resp.data['text'], self.update_data['text'])
         self.article.refresh_from_db()
         self.assertEqual(self.article.title, self.update_data['title'])
         self.assertEqual(self.article.excerpt, self.update_data['excerpt'])
@@ -73,9 +71,9 @@ class TestArticleApiView(BaseAPITest):
                                  data=self.partial_data, )
         self.assertEqual(resp.status_code, 200)
 
-        # self.assertEqual(resp.data['title'], self.partial_data['title'])
-        # self.assertEqual(resp.data['excerpt'], self.article.excerpt)
-        # self.assertEqual(resp.data['text'], self.partial_data['text'])
+        self.assertEqual(resp.data['title'], self.partial_data['title'])
+        self.assertEqual(resp.data['excerpt'], self.article.excerpt)
+        self.assertEqual(resp.data['text'], self.partial_data['text'])
         self.article.refresh_from_db()
         self.assertEqual(self.article.title, self.partial_data['title'])
         self.assertEqual(self.article.text, self.partial_data['text'])
