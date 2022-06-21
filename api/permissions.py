@@ -1,5 +1,7 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+from users.models import User
+
 
 class IsLeader(BasePermission):
     message = "Sorry, you don't have Leader or Admin rights for adding a post."
@@ -59,6 +61,18 @@ class IsWriter(BasePermission):
         if view.action == 'create':
             return request.user.is_writer
         return True
+
+
+class IsSameUser(BasePermission):
+    message = "You're not this user"
+
+    def has_object_permission(self, request, view, obj):
+        # print(User.objects.filter(email=obj.user))
+        # print(request.user)
+        user = User.objects.filter(email=obj)
+        if obj == request.user:
+            return True
+        return False
 
 
 # for post edit, checks if it's the same author edits their's post

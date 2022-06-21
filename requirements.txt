@@ -47,3 +47,4 @@ sqlparse==0.4.2
 tomli==2.0.1
 uritemplate==4.1.1
 urllib3==1.26.9
+django-clearcache==1.2.1

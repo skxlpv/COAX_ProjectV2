@@ -1,13 +1,14 @@
 from rest_framework import status, mixins
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api.permissions import IsSameUser
 from users.models import User, Profile
-from users.serializers import UserSerializer, ProfileSerializer
+from users.serializers import UserSerializer, ProfileSerializer, EditUserSerializer
 
 
 class UserViewSet(mixins.ListModelMixin,
@@ -27,6 +28,14 @@ class ProfileViewSet(mixins.ListModelMixin,
 
     permission_classes = (IsAuthenticated,)
     serializer_class = ProfileSerializer
+
+
+class EditUserViewSet(mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin,
+                      GenericViewSet):
+    permission_classes = (IsAuthenticated, IsSameUser)
+    queryset = User.objects.all()
+    serializer_class = EditUserSerializer
 
 
 class BlackListTokenView(APIView):
