@@ -7,6 +7,28 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 
+class Rating(models.Model):
+    RATES = [
+        (1, 'Awful'),
+        (2, 'Bad'),
+        (3, 'Normal'),
+        (4, 'Good'),
+        (5, 'Awesome'),
+    ]
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='User')
+    rate = models.PositiveIntegerField(choices=RATES, null=False, blank=False)
+
+    class Meta:
+        verbose_name = 'Rating'
+        verbose_name_plural = 'Ratings'
+        ordering = ['rate']
+
+    def __str__(self):
+        return f'{self.rate}'
+
+
 class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password, first_name, last_name, **other_fields):
@@ -51,6 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, blank=True, null=True, related_name='rating')
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, blank=True, null=True)
 
     LEADER = "LD"
