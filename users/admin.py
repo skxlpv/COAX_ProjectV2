@@ -2,7 +2,9 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
-from users.models import User
+from users.models import User, Profile
+
+
 # from .views import get_hospital
 
 # def some(request):
@@ -86,3 +88,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Profile)

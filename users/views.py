@@ -1,10 +1,32 @@
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.decorators import api_view
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User
+
+from users.models import User, Profile
+from users.serializers import UserSerializer, ProfileSerializer
+
+
+class UserViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  GenericViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class ProfileViewSet(mixins.ListModelMixin,
+                     mixins.UpdateModelMixin,
+                     GenericViewSet):
+
+    def get_queryset(self):
+        return Profile.objects.filter(user=self.request.user)
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
 
 
 class BlackListTokenView(APIView):
@@ -20,11 +42,7 @@ class BlackListTokenView(APIView):
             return Response({'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# sends the current user data to the FrontEnd
 @api_view(['GET'])
 def current_user(request):
     user = request.user
-    return Response({
-        # user data, that should be passed to the FrontEnd
-        'email': user.email,
-    })
+    return Response({'email': user.email})

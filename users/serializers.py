@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import User
+
+from hospitals.serializers import HospitalSerializer
+from .models import User, Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,3 +21,10 @@ class AuthorSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ['id', 'user', 'image']
+        read_only_fields = fields

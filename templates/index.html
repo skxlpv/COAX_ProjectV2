@@ -9,7 +9,10 @@
 </head>
 <body>
     {% block content%}
-    ///Something in index
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        <h1>{{ user.email }}</h1>
+        <img src="{{ user.profile.image.url }}">
+{#        style="width: 10%; height: 15%; border-radius:50%;"#}
     {% endblock %}
 </body>
 </html>
