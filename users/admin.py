@@ -87,7 +87,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     def avg_rate(self, obj) -> str:
-        average = Rating.objects.all().aggregate(Avg('rate'))
+        average = Rating.objects.filter(user=obj).all().aggregate(Avg('rate'))
         return f"{average['rate__avg']:.2f}"
 
     search_fields = ('email',)
