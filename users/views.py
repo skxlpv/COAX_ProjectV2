@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, mixins
 from rest_framework.decorators import api_view, action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -21,21 +22,28 @@ class UserViewSet(mixins.ListModelMixin,
 
 
 class ProfileViewSet(mixins.ListModelMixin,
-                     mixins.UpdateModelMixin,
                      mixins.RetrieveModelMixin,
                      GenericViewSet):
 
-    # def get_queryset(self):
-    #     return Profile.objects.filter(user=self.request.user)
-    # serializer_class = ProfileSerializer
+    def get_queryset(self):
+        return Profile.objects.filter(user=self.request.user)
+    serializer_class = ProfileSerializer
 
-    def get_serializer_class(self):
-        if self.action in ('update', 'partial_update',):
-            return EditUserSerializer
-        return UserSerializer
+    # serializer_class = UserSerializer
     permission_classes = (IsAuthenticated, IsSameUser)
-    queryset = User.objects.all()
+    # queryset = User.objects.all()
 
+    # @swagger_auto_schema(request_body=EditUserSerializer)
+    @action(methods=['PATCH'], detail=False, serializer_class=EditUserSerializer, url_path='edit', url_name='edit')
+    def edit(self, request):
+        instance = self.request.user
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
+
+    # @swagger_auto_schema(request_body=EditPasswordSerializer)
     @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password', url_name='change-password')
     def change_password(self, request):
         user = self.request.user
@@ -43,7 +51,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         if serializer.is_valid():
             user.set_password(serializer.validated_data['password'])
             user.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)

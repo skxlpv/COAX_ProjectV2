@@ -12,7 +12,6 @@ class EditPasswordSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         required=True,
-        help_text='Leave empty if no changes',
         style={'input_type': 'password', 'placeholder': 'Password'},
     )
 
@@ -27,7 +26,6 @@ class EditPasswordSerializer(serializers.ModelSerializer):
 
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
-        email = serializers.EmailField()
         model = User
         fields = ['id', 'first_name', 'last_name', 'email']
 
