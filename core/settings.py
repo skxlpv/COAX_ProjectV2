@@ -153,7 +153,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'core.pagination.StandardResults',
@@ -192,7 +191,7 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,
+    'USE_SESSION_AUTH': True,
     'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomSwaggerAutoSchema',
     'SECURITY_DEFINITIONS': {
         'JWT': {

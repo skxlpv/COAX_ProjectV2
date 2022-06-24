@@ -1,30 +1,38 @@
 from django.contrib.auth.hashers import make_password
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
+import django.contrib.auth.password_validation as validators
+from rest_framework.validators import UniqueValidator
 
-from hospitals.serializers import HospitalSerializer
 from .models import User, Profile
 
 
-class EditUserSerializer(serializers.ModelSerializer):
+class EditPasswordSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         required=True,
         help_text='Leave empty if no changes',
-        style={'input_type': 'password', 'placeholder': 'Password'}
+        style={'input_type': 'password', 'placeholder': 'Password'},
     )
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'password']
+        fields = ['id', 'password']
 
-    def update(self, instance, validated_data):
-        user = super().update(instance, validated_data)
-        try:
-            user.set_password(validated_data['password'])
-            user.save()
-        except KeyError:
-            pass
-        return user
+    def validate(self, data):
+        validators.validate_password(password=data['password'])
+        return data
+
+
+class EditUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email']
+        extra_kwargs = {
+            'email': {
+                'validators': [UniqueValidator(queryset=User.objects.all())],
+            }
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):

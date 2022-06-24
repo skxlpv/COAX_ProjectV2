@@ -67,15 +67,15 @@ class IsSameUser(BasePermission):
     message = "You're not this user"
 
     def has_object_permission(self, request, view, obj):
-        # print(User.objects.filter(email=obj.user))
-        # print(request.user)
-        user = User.objects.filter(email=obj)
-        if obj == request.user:
-            return True
-        return False
+        if request.method in ('PUT', 'PATCH'):
+
+            if obj == request.user:
+                return True
+            return False
+
+        return True
 
 
-# for post edit, checks if it's the same author edits their's post
 class HasArticleUpdate(BasePermission):
     message = "You're not the author of this post"
 

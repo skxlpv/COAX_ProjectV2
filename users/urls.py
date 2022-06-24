@@ -1,13 +1,12 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from .views import BlackListTokenView, current_user, UserViewSet, ProfileViewSet, EditUserViewSet
+from .views import BlackListTokenView, current_user, UserViewSet, ProfileViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = SimpleRouter(trailing_slash=True)
 router.register(r'', UserViewSet, basename='users-list')
 router.register(r'my-profile', ProfileViewSet, basename='my-profile')
-router.register(r'edit', EditUserViewSet, basename='edit')
 
 app_name = 'users'
 
