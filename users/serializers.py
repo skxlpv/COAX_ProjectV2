@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.core.validators import validate_email
 from rest_framework import serializers, status
 from rest_framework.response import Response
 import django.contrib.auth.password_validation as validators
@@ -26,13 +27,14 @@ class EditPasswordSerializer(serializers.ModelSerializer):
 
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
+        email = serializers.EmailField()
         model = User
         fields = ['id', 'first_name', 'last_name', 'email']
-        extra_kwargs = {
-            'email': {
-                'validators': [UniqueValidator(queryset=User.objects.all())],
-            }
-        }
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value.lower()).exists():
+            raise serializers.ValidationError("User already exist")
+        return value.lower()
 
 
 class UserSerializer(serializers.ModelSerializer):
