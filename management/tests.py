@@ -101,19 +101,19 @@ class TestItemViewSet(BaseAPITest):
         self.logout()
 
         resp = self.client.get('/v1/management/items/')
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
         resp = self.client.get(f'/v1/management/items/{self.item.id}/')
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
         resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.patch_data)
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
         resp = self.client.get('/v1/management/categories/')
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
         resp = self.client.get(f'/v1/management/categories/{self.item.id}/')
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
 
 #############################################################

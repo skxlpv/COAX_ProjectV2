@@ -95,5 +95,5 @@ class TestArticleApiView(BaseAPITest):
         self.logout()
         resp = self.client.get(reverse('v1:articles:articles-list'))
 
-        self.assertEqual(resp.status_code, 403)
+        self.assertEqual(resp.status_code, 401)
 
