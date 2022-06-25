@@ -21,16 +21,26 @@ class UserViewSet(mixins.ListModelMixin,
     serializer_class = UserSerializer
 
 
+class ProfileListViewSet(mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin,
+                         GenericViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
 class ProfileViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      GenericViewSet):
 
     def get_queryset(self):
         return Profile.objects.filter(user=self.request.user)
+
     serializer_class = ProfileSerializer
 
     # serializer_class = UserSerializer
     permission_classes = (IsAuthenticated, IsSameUser)
+
     # queryset = User.objects.all()
 
     # @swagger_auto_schema(request_body=EditUserSerializer)
@@ -44,7 +54,8 @@ class ProfileViewSet(mixins.ListModelMixin,
         return Response(status=status.HTTP_200_OK)
 
     # @swagger_auto_schema(request_body=EditPasswordSerializer)
-    @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password', url_name='change-password')
+    @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password',
+            url_name='change-password')
     def change_password(self, request):
         user = self.request.user
         serializer = self.serializer_class(data=request.data)
