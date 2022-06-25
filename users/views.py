@@ -21,6 +21,16 @@ class UserViewSet(mixins.ListModelMixin,
     serializer_class = UserSerializer
 
 
+class ProfileListViewSet(mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin,
+                         GenericViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated, )
+
+
+
 class ProfileViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      GenericViewSet):
@@ -29,9 +39,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         return Profile.objects.filter(user=self.request.user)
     serializer_class = ProfileSerializer
 
-    # serializer_class = UserSerializer
     permission_classes = (IsAuthenticated, IsSameUser)
-    # queryset = User.objects.all()
 
     # @swagger_auto_schema(request_body=EditUserSerializer)
     @action(methods=['PATCH'], detail=False, serializer_class=EditUserSerializer, url_path='edit', url_name='edit')
