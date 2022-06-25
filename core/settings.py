@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'users',
     'events',
     'articles',
+    'patients',
     'hospitals',
     'management',
 

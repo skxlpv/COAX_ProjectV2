@@ -26,6 +26,7 @@ api_urlpatterns_v1 = [
     path('management/', include(('management.urls', 'management'))),
     path('hospitals/', include('hospitals.urls'), name='hospitals'),
     path('events/', include(('events.urls', 'events'))),
+    path('patients/', include(('patients.urls', 'patients'))),
 ]
 
 urlpatterns = [
