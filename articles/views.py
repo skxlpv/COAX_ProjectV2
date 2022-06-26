@@ -21,22 +21,8 @@ class ArticlesViewSet(mixins.ListModelMixin,
 
     ## Get detailed information about articles
 
-    URLs
-    ```python
-    All articles:
-    GET http://127.0.0.1:8000/v1/articles/
-
-    Specific article:
-    GET http://127.0.0.1:8000/v1/articles/x
-    ```
-
     create:
     Create article
-
-    URL
-    ```python
-    POST http://127.0.0.1:8000/v1/articles/
-    ```
 
     Request example
     ```python
