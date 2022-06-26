@@ -32,7 +32,6 @@ class ProfileListViewSet(mixins.ListModelMixin,
     permission_classes = (IsAuthenticated, )
 
 
-
 class ProfileViewSet(mixins.ListModelMixin,
                      GenericViewSet):
 
