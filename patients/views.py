@@ -9,7 +9,9 @@ from patients.serializers import PatientSerializer
 
 
 class PatientViewSet(mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
                      mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
                      GenericViewSet):
 
     def perform_create(self, serializer):
