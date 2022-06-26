@@ -9,6 +9,7 @@ from events.serializers import EventSerializer
 
 class EventViewSet(mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
+                   mixins.CreateModelMixin,
                    GenericViewSet):
 
     permission_classes = (IsAuthenticated, )
