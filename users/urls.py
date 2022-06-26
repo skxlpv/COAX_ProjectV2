@@ -4,8 +4,8 @@ from rest_framework.routers import SimpleRouter
 from .views import current_user, UserViewSet, ProfileViewSet
 
 router = SimpleRouter(trailing_slash=True)
-router.register(r'', UserViewSet, basename='users-list')
-router.register(r'my-profile', ProfileViewSet, basename='my-profile')
+# router.register(r'', UserViewSet, basename='users-list')
+router.register(r'my-profile', ProfileViewSet, basename='profile')
 
 app_name = 'users'
 

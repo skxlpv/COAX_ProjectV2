@@ -17,12 +17,13 @@ class UserViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   GenericViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = User.objects.all()
+
+    def get_queryset(self):
+        return User.objects.filter(hospital=self.request.user.hospital)
     serializer_class = UserSerializer
 
 
 class ProfileViewSet(mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
                      GenericViewSet):
 
     def get_queryset(self):
