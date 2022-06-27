@@ -21,8 +21,8 @@ class Patient(models.Model):
     check_in_date = models.DateField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Patient'
+        verbose_name_plural = 'Patients'
         ordering = ['-id']
 
     def __str__(self):
