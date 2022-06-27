@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from .views import current_user, UserViewSet, ProfileViewSet, ProfileListViewSet
+from .views import UserViewSet, ProfileViewSet, ProfileListViewSet
 
 router = SimpleRouter(trailing_slash=True)
 # router.register(r'', UserViewSet, basename='users-list')

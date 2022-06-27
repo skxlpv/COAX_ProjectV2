@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import Field
 
 from events.models import Event
 

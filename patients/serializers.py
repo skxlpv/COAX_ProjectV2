@@ -1,3 +1,4 @@
+from phonenumber_field.phonenumber import PhoneNumber
 from rest_framework import serializers
 
 from hospitals.serializers import HospitalSerializer

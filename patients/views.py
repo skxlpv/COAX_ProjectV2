@@ -16,9 +16,8 @@ class PatientViewSet(mixins.ListModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(doctor=self.request.user,
-                        hospital=self.request.user.hospital,
-                        check_in_date=datetime.utcnow())
+                        hospital=self.request.user.hospital)
 
     queryset = Patient.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = PatientSerializer

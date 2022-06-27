@@ -63,9 +63,3 @@ class ProfileViewSet(mixins.ListModelMixin,
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-def current_user(request):
-    user = request.user
-    return Response({'email': user.email})

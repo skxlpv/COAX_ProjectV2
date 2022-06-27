@@ -12,11 +12,11 @@ class Event(models.Model):
         (2, 'Conference'),
     ]
 
-    title = models.CharField(max_length=150, default='NO TITLE')
-    description = models.CharField(max_length=250, default='NO DESCRIPTION', blank=True, null=True)
-    type = models.PositiveIntegerField(choices=TYPES, null=False, blank=False, default=1)
+    title = models.CharField(max_length=150)
+    description = models.CharField(max_length=250, blank=True, null=True)
+    type = models.PositiveIntegerField(choices=TYPES)
     participants = models.ManyToManyField(User, related_name='participants', blank=True, null=True)
-
+    # file upload
     start_time = models.DateTimeField(default=datetime.now(), blank=True, null=True)
     end_time = models.DateTimeField(default=datetime.now(), blank=True, null=True)
 
