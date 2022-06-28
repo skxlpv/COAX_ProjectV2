@@ -8,11 +8,10 @@ from users.models import User
 class Patient(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    phone_number = PhoneNumberField(default='', unique=True, blank=True, null=True)
-    email = models.EmailField(max_length=200, blank=True, unique=True)
+    phone_number = PhoneNumberField(default='', unique=True, blank=True)
+    email = models.EmailField(max_length=200, null=True, unique=True)
 
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, blank=False)
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor', default=0)
     diagnosis = models.TextField(blank=True)
     receipt = models.TextField(blank=True)
 

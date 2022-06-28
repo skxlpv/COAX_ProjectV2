@@ -8,14 +8,6 @@ from patients.models import Patient
 
 class TestPatientViewSet(BaseAPITest):
     def setUp(self):
-        self.patient_data = {
-            "first_name": "Test",
-            "last_name": "TestLast",
-            "diagnosis": "Some Diagnosis",
-            "receipt": "Some Receipt",
-            "phone_number": "+380957896778"
-        }
-
         self.department = mixer.blend(Department)
         self.city = mixer.blend(City)
         self.hospital = mixer.blend(Hospital)
@@ -26,10 +18,28 @@ class TestPatientViewSet(BaseAPITest):
         self.patient = mixer.blend(Patient, doctor=self.user)
 
     def test_create(self):
+        self.patient_data = {
+            "first_name": "Test",
+            "last_name": "TestLastName",
+            "phone_number": "+380960000000"
+        }
+
         resp = self.client.post('/v1/patients/', self.patient_data)
 
         self.assertEqual(resp.status_code, 201)
         self.assertTrue(resp.data['first_name'], self.patient_data['first_name'])
+
+    def test_create_no_phone(self):
+        self.patient_data = {
+            "first_name": "Test",
+            "last_name": "TestLastName",
+            "phone_number": ""
+        }
+
+        resp = self.client.post('/v1/patients/', self.patient_data)
+
+        self.assertEqual(resp.status_code, 201)
+        self.assertTrue(resp.data['phone_number'], self.patient_data['phone_number'])
 
     def test_list(self):
         resp = self.client.get('/v1/patients/')
@@ -46,11 +56,6 @@ class TestPatientViewSet(BaseAPITest):
 
     def test_update(self):
         patch_data = {
-            "first_name": "SHOULD NOT BE CHANGED",
-            "last_name": "SHOULD NOT BE CHANGED",
-            # "phone_number": "+380965639682",
-            "check_in_date": "SHOULD NOT BE CHANGED",
-
             "diagnosis": "Updated diagnosis, based on the new symptoms",
             "receipt": "Added some meds, that were not needed before"
         }
@@ -66,8 +71,22 @@ class TestPatientViewSet(BaseAPITest):
         self.assertEqual(self.patient.diagnosis, patch_data['diagnosis'])
         self.assertEqual(self.patient.receipt, patch_data['receipt'])
 
-        self.assertNotEquals(self.patient.first_name, patch_data['first_name'])
-        self.assertNotEquals(self.patient.last_name, patch_data['last_name'])
+    def test_update_no_data(self):
+        self.invalid_patch_data = {
+            # NO DIAGNOSIS AND RECEIPT, NO DATA AT ALL
+        }
+
+        # the DIAGNOSIS and RECEIPT data stays the same after no data was passed
+        resp = self.client.patch(f'/v1/patients/{self.patient.id}/', data=self.invalid_patch_data)
+        self.assertEqual(resp.status_code, 200)
+
+        self.patient.refresh_from_db()
+
+        self.assertEqual(self.patient.diagnosis, self.patient.diagnosis)
+        self.assertEqual(self.patient.receipt, self.patient.receipt)
+
+        self.assertNotEquals(self.patient.diagnosis, self.invalid_patch_data)
+        self.assertNotEquals(self.patient.receipt, self.invalid_patch_data)
 
     def test_phone_number(self):
         resp = self.client.post('/v1/patients/', self.patient_data)
