@@ -11,13 +11,13 @@ class Patient(models.Model):
     phone_number = PhoneNumberField(default='', unique=True, blank=True)
     email = models.EmailField(max_length=200, null=True, unique=True)
 
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor', default=0)
-    diagnosis = models.TextField(blank=True)
-    receipt = models.TextField(blank=True)
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
+    diagnosis = models.TextField(blank=True, null=True)
+    receipt = models.TextField(blank=True, null=True)
 
     is_discharged = models.BooleanField(default=False)
 
-    check_in_date = models.DateField(auto_now_add=True)
+    created_at = models.DateField(null=True, blank=True, verbose_name='Check in date')
 
     class Meta:
         verbose_name = 'Patient'
