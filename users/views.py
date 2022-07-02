@@ -9,37 +9,28 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.permissions import IsSameUser
-from users.models import User, Profile
-from users.serializers import UserSerializer, ProfileSerializer, EditPasswordSerializer, EditUserSerializer
+from users.models import User
+from users.serializers import ProfileSerializer, EditPasswordSerializer, EditUserSerializer
 
 
-class UserViewSet(mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,
-                  GenericViewSet):
+class UsersViewSet(mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return User.objects.filter(hospital=self.request.user.hospital)
-    serializer_class = UserSerializer
-
-
-class ProfileListViewSet(mixins.ListModelMixin,
-                         mixins.RetrieveModelMixin,
-                         GenericViewSet):
-
-    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = (IsAuthenticated, )
 
 
 class ProfileViewSet(mixins.ListModelMixin,
                      GenericViewSet):
 
-    def get_queryset(self):
-        return Profile.objects.filter(user=self.request.user)
-    serializer_class = ProfileSerializer
-
     permission_classes = (IsAuthenticated, IsSameUser)
+
+    def get_queryset(self):
+        return User.objects.filter(email=self.request.user.email)
+    serializer_class = ProfileSerializer
 
     # @swagger_auto_schema(request_body=EditUserSerializer)
     @action(methods=['PATCH'], detail=False, serializer_class=EditUserSerializer, url_path='edit', url_name='edit')

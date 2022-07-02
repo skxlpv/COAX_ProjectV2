@@ -4,16 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
 from django.db.models import Avg
 
-from core import settings
-from users.models import User, Profile, Rating
-
-
-# from .views import get_hospital
-
-# def some(request):
-#     current_user = request.user
-#     print(1)
-#     print(current_user.hospital)
+from users.models import User, Rating
 
 
 class UserCreationForm(forms.ModelForm):
@@ -22,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'hospital', 'role')
+        fields = ('email', 'first_name', 'last_name', 'hospital', 'role', 'image')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -74,7 +65,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'hospital', 'role')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'hospital', 'role', 'image')}),
         ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_superuser', 'is_writer',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -82,7 +73,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'first_name', 'last_name', 'hospital', 'role', 'password1', 'password2', 'is_staff'),
+            'fields': ('email', 'first_name', 'last_name', 'hospital', 'role', 'password1', 'password2', 'is_staff', 'image'),
         }),
     )
 
@@ -99,5 +90,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Profile)
 admin.site.register(Rating)
