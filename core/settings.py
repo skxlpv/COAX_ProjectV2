@@ -37,15 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'clearcache',
     'crispy_forms',
-    'mptt',
+    'django_filters',
 
     'api',
     'users',
+    'events',
     'articles',
+    'patients',
     'hospitals',
     'management',
-    
 
     'drf_yasg',
     'corsheaders',
@@ -143,15 +145,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = ''
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'core.pagination.StandardResults',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SIMPLE_JWT = {
@@ -187,7 +195,7 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,
+    'USE_SESSION_AUTH': True,
     'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomSwaggerAutoSchema',
     'SECURITY_DEFINITIONS': {
         'JWT': {
@@ -210,4 +218,3 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 DEFAULT_API_VERSION = 'v1'
-

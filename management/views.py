@@ -57,11 +57,6 @@ class ItemViewSet(mixins.ListModelMixin,
     serializer_class = ItemSerializer
     pagination_class = SmallResults
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     query_items = Item.objects.filter(name__istartswith=kwargs['pk'])
-    #     serializer = ItemSerializer(query_items, many=True)
-    #     return Response(serializer.data)
-
 
 class CategoryViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,

@@ -6,7 +6,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = ('id', 'department_name')
-        read_only_fields = ('id', )
+        read_only_fields = ('id', 'department_name')
 
 
 class CitySerializer(serializers.ModelSerializer):

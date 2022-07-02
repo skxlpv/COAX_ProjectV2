@@ -2,7 +2,12 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
-from users.models import User
+from django.db.models import Avg
+
+from core import settings
+from users.models import User, Profile, Rating
+
+
 # from .views import get_hospital
 
 # def some(request):
@@ -65,11 +70,11 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
 
-    list_display = ('email', 'id', 'first_name', 'last_name', 'hospital', 'role', )
+    list_display = ('email', 'id', 'first_name', 'last_name', 'hospital', 'role', 'avg_rate')
     list_filter = ('is_admin', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'hospital', 'role', )}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'hospital', 'role')}),
         ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_superuser', 'is_writer',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -80,9 +85,19 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'first_name', 'last_name', 'hospital', 'role', 'password1', 'password2', 'is_staff'),
         }),
     )
+
+    def avg_rate(self, obj) -> str:
+        if Rating.objects.filter(user=obj).all():
+            average = Rating.objects.filter(user=obj).all().aggregate(Avg('rate'))
+            return f"{average['rate__avg']:.2f}"
+        else:
+            return 'NO RATE'
+
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Profile)
+admin.site.register(Rating)
