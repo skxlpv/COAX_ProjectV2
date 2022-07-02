@@ -124,10 +124,28 @@ class TestPatientViewSet(BaseAPITest):
             "last_name": "TestLastName",
             "doctor": self.user.id,
             "phone_number": "",
-            "created_at": datetime.date(2020,2,24)
+            "created_at": datetime.date(2020, 2, 24)
         }
 
         resp = self.client.post('/v1/patients/', self.patient_data)
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['created_at'], f"{self.patient_data['created_at']}")
+
+    # def test_filter_by_first_name(self):
+    #     self.doctor = self.create_and_login(hospital=self.hospital1,
+    #                                         email='testemail@mail.com',
+    #                                         first_name='TESTNAME')
+    #     self.patient_data = {
+    #         "first_name": "Test",
+    #         "last_name": "TestLastName",
+    #         "doctor": self.doctor.id,
+    #         "phone_number": "+380960000005"
+    #     }
+    #
+    #     self.patient1 = self.client.post('/v1/patients/', data=self.patient_data)
+    #     self.patient2 = self.client.post('/v1/patients/', data=self.patient_data)
+    #
+    #     resp = self.client.get(f'/v1/patients/?doctor={self.doctor.first_name}')
+    #     print(resp.data)
+    #     self.assertEqual(resp.data['doctor'], self.doctor.id)

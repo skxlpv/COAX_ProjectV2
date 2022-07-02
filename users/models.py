@@ -93,21 +93,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_writer = models.BooleanField(default=True)  # NEW
+    is_writer = models.BooleanField(default=True)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
 
-    def __str__(self):
-        return self.email
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='media/profile_images')
-
-    def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}'
 
     def save(self, *args, **kwargs):
         super().save()
@@ -135,3 +126,6 @@ class Profile(models.Model):
             img.thumbnail((300, 300))
 
         img.save(self.image.path)
+
+    def __str__(self):
+        return self.email

@@ -1,11 +1,7 @@
-from django.contrib.auth.hashers import make_password
-from django.core.validators import validate_email
-from rest_framework import serializers, status
-from rest_framework.response import Response
+from rest_framework import serializers
 import django.contrib.auth.password_validation as validators
-from rest_framework.validators import UniqueValidator
 
-from .models import User, Profile
+from .models import User
 
 
 class EditPasswordSerializer(serializers.ModelSerializer):
@@ -53,9 +49,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-
     class Meta:
-        model = Profile
-        fields = ['id', 'user', 'image']
+        model = User
+        fields = ['id', 'image', 'first_name', 'last_name', 'email']
         read_only_fields = fields
