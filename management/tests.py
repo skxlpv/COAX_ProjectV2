@@ -32,7 +32,7 @@ class TestItemViewSet(BaseAPITest):
         resp = self.client.get('/v1/management/items/', )
 
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue(len(resp.data['results']), Item.objects.all().count())
+        self.assertTrue(resp.data['count'], Item.objects.all().count())
 
     def test_detail(self):
         resp = self.client.get(f'/v1/management/items/{self.item.id}/', )
