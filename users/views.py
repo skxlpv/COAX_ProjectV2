@@ -1,5 +1,4 @@
-from django.contrib.auth.hashers import make_password
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers
 from rest_framework import status, mixins
 from rest_framework.decorators import api_view, action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -23,19 +22,26 @@ class UsersViewSet(mixins.ListModelMixin,
     serializer_class = ProfileSerializer
 
 
-class ProfileViewSet(mixins.RetrieveModelMixin,
+class ProfileViewSet(mixins.ListModelMixin,
+                     # mixins.UpdateModelMixin,
                      GenericViewSet):
 
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated, IsSameUser)
 
+    def get_queryset(self):
+        return User.objects.filter(email=self.request.user.email)
+
     def get_object(self):
         return self.request.user
 
+    # def perform_update(self, serializer):
+    #     instance = self.get_object()
+    #     return serializer.save()
     # @swagger_auto_schema(request_body=EditUserSerializer)
     @action(methods=['PATCH'], detail=False, serializer_class=EditUserSerializer, url_path='edit', url_name='edit')
     def edit(self, request):
-        instance = self.request.user
+        instance = self.get_object()
         serializer = self.serializer_class(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -47,6 +53,8 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
             url_name='change-password')
     def change_password(self, request):
         user = self.get_object()
+        if not user.check_password(request.data['old_password']):
+            raise serializers.ValidationError("Wrong old password")
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user.set_password(serializer.validated_data['password'])

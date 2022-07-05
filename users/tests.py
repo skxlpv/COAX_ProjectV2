@@ -12,7 +12,12 @@ class TestUserApiView(BaseAPITest):
         self.hospital = mixer.blend(Hospital)
         self.user = self.create_and_login(hospital=self.hospital, is_writer=True)
 
+        self.old_password = {
+            "old_password": "test_password"
+        }
+
         self.password = {
+            "old_password": self.old_password["old_password"],
             "password": "dafFArgv34gFFgv"
         }
 
@@ -30,9 +35,17 @@ class TestUserApiView(BaseAPITest):
 
     def test_change_password_validation_error(self):
         resp = self.client.patch(reverse('v1:users:profile-change-password'),
-                                 data={"password": "a"})
+                                 data={"old_password": self.old_password["old_password"],
+                                       "password": "a"})
         self.assertEqual(resp.status_code, 400)
-        self.assertFalse(self.user.check_password(self.password))
+        self.assertFalse(self.user.check_password(self.password["password"]))
+
+    def test_change_password_old_wrong(self):
+        resp = self.client.patch(reverse('v1:users:profile-change-password'),
+                                 data={"old_password": "wrong_old",
+                                       "password": "test_password12167"})
+        self.assertEqual(resp.status_code, 400)
+        self.assertFalse(self.user.check_password(self.password["password"]))
 
     def test_change_data(self):
         resp = self.client.patch(reverse('v1:users:profile-edit'),
@@ -50,16 +63,18 @@ class TestUserApiView(BaseAPITest):
                                  data={"email": "exist@gmail.com"})
 
         self.assertEqual(resp.status_code, 400)
-        self.assertEqual(resp.data['email'][0], 'user with this email already exists.')
-        self.fail()
+
+        self.user.refresh_from_db()
+        self.assertNotEqual(self.user.email, self.user2.email)
 
     def test_change_email_validation_error(self):
         resp = self.client.patch(reverse('v1:users:profile-edit'),
                                  data={"email": "a@a.a"})
 
         self.assertEqual(resp.status_code, 400)
-        self.assertEqual(resp.data['email'][0], 'Enter a valid email address.')
-        self.fail()
+
+        self.user.refresh_from_db()
+        self.assertNotEqual(self.user.email, resp.data.serializer.data["email"])
 
     def test_my_profile(self):
         resp = self.client.get('/v1/users/my-profile/') # this is simple path() URL

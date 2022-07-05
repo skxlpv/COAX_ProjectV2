@@ -5,6 +5,12 @@ from .models import User
 
 
 class EditPasswordSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password', 'placeholder': 'Old password'},
+    )
+
     password = serializers.CharField(
         write_only=True,
         required=True,
@@ -13,11 +19,11 @@ class EditPasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'password']
+        fields = ['id', 'password', 'old_password']
 
-    def validate(self, data):
-        validators.validate_password(password=data['password'])
-        return data
+    def validate_password(self, value):
+        validators.validate_password(password=value)
+        return value
 
 
 class EditUserSerializer(serializers.ModelSerializer):
@@ -53,3 +59,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'image', 'first_name', 'last_name', 'email']
         read_only_fields = fields
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value.lower()).exists():
+            raise serializers.ValidationError("User already exist")
+        return value.lower()
