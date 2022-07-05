@@ -20,28 +20,29 @@ class UserViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         return User.objects.filter(hospital=self.request.user.hospital)
+
     serializer_class = UserSerializer
 
 
 class ProfileListViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          GenericViewSet):
-
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
 
-class ProfileViewSet(mixins.ListModelMixin,
+class ProfileViewSet(mixins.RetrieveModelMixin,
                      GenericViewSet):
-
-    def get_queryset(self):
-        return Profile.objects.filter(user=self.request.user)
     serializer_class = ProfileSerializer
 
     permission_classes = (IsAuthenticated, IsSameUser)
 
-    # @swagger_auto_schema(request_body=EditUserSerializer)
+    def get_object(self):
+        return self.request.user
+
+    ## UpdateModel
+
     @action(methods=['PATCH'], detail=False, serializer_class=EditUserSerializer, url_path='edit', url_name='edit')
     def edit(self, request):
         instance = self.request.user
@@ -52,20 +53,13 @@ class ProfileViewSet(mixins.ListModelMixin,
         return Response(status=status.HTTP_200_OK)
 
     # @swagger_auto_schema(request_body=EditPasswordSerializer)
-    @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password', url_name='change-password')
+    @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password',
+            url_name='change-password')
     def change_password(self, request):
-        user = self.request.user
+        user = self.get_object()
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            user.set_password(serializer.validated_data['password'])
-            user.save()
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        user.set_password(serializer.validated_data['password'])
+        user.save()
+        return Response(status=status.HTTP_200_OK)
 
-
-@api_view(['GET'])
-def current_user(request):
-    user = request.user
-    return Response({'email': user.email})
