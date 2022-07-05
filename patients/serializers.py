@@ -1,27 +1,28 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
-from hospitals.serializers import HospitalSerializer
 from patients.models import Patient
 
 
 class PatientSerializer(serializers.ModelSerializer):
-    hospital = HospitalSerializer(many=False, read_only=True)
-
     class Meta:
         model = Patient
         fields = ['id', 'first_name', 'last_name', 'phone_number',
-                  'hospital', 'doctor', 'check_in_date', 'diagnosis', 'receipt']
+                  'created_at', 'diagnosis', 'receipt', 'doctor']
 
-    def update(self, patient, validated_data):
-        diagnosis = self.validated_data.get('diagnosis')
-        if not diagnosis:
-            raise serializers.ValidationError('No diagnosis was given')
+    def validate_diagnosis(self, value):
+        if value is None:
+            raise ValidationError('No diagnosis was provided')
+        return value
 
-        receipt = self.validated_data.get('receipt')
-        if not receipt:
-            raise serializers.ValidationError('No receipt was given')
+    def validate_receipt(self, value):
+        if value is None:
+            raise ValidationError('No receipt was provided')
+        return value
 
-        patient.receipt = validated_data['receipt']
-        patient.diagnosis = validated_data['diagnosis']
-        patient.save()
-        return patient
+    def update(self, instance, validated_data):
+        # other way updating it updates only one field, while the other becomes null
+        instance.receipt = validated_data.get('receipt', instance.receipt)
+        instance.diagnosis = validated_data.get('diagnosis', instance.diagnosis)
+        instance.save()
+        return instance

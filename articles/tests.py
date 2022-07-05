@@ -1,4 +1,3 @@
-from django.test import TestCase
 from rest_framework.reverse import reverse
 
 from api.tests import BaseAPITest
@@ -96,4 +95,3 @@ class TestArticleApiView(BaseAPITest):
         resp = self.client.get(reverse('v1:articles:articles-list'))
 
         self.assertEqual(resp.status_code, 401)
-

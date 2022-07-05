@@ -1,4 +1,4 @@
-asgiref==3.5.1
+asgiref==3.5.2
 attrs==21.4.0
 certifi==2022.5.18.1
 charset-normalizer==2.0.12
@@ -6,11 +6,14 @@ coreapi==2.3.3
 coreschema==0.0.4
 coverage==6.4.1
 Django==4.0.4
+django-clearcache==1.2.1
 django-cors-headers==3.12.0
 django-crispy-forms==1.14.0
-django-filter==21.1
+django-filter==22.1
 django-js-asset==2.0.0
 django-mptt==0.13.4
+django-phonenumber-field==6.3.0
+django-phonenumbers==1.0.1
 django-rest-framework==0.1.0
 djangorestframework==3.13.1
 djangorestframework-jwt==1.11.0
@@ -28,6 +31,7 @@ MarkupSafe==2.1.1
 marshmallow==3.15.0
 mixer==7.2.2
 packaging==21.3
+phonenumbers==8.12.50
 Pillow==9.1.1
 pluggy==1.0.0
 psycopg2==2.9.3
@@ -47,4 +51,3 @@ sqlparse==0.4.2
 tomli==2.0.1
 uritemplate==4.1.1
 urllib3==1.26.9
-django-clearcache==1.2.1
