@@ -25,6 +25,13 @@ class EditPasswordSerializer(serializers.ModelSerializer):
         validators.validate_password(password=value)
         return value
 
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        validators.validate_password(password=value)
+        if not user.check_password(value):
+            raise serializers.ValidationError("Wrong old password")
+        return
+
 
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:

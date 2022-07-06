@@ -53,9 +53,7 @@ class ProfileViewSet(mixins.ListModelMixin,
             url_name='change-password')
     def change_password(self, request):
         user = self.get_object()
-        if not user.check_password(request.data['old_password']):
-            raise serializers.ValidationError("Wrong old password")
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={"request": self.request})
         serializer.is_valid(raise_exception=True)
         user.set_password(serializer.validated_data['password'])
         user.save()
