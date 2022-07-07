@@ -27,24 +27,24 @@ class TestUserApiView(BaseAPITest):
         }
 
     def test_change_password(self):
-        resp = self.client.patch(reverse('v1:users:profile-change-password'),
-                                 data=self.password)
+        resp = self.client.put(reverse('v1:users:profile-change-password'),
+                               data=self.password)
         self.assertEqual(resp.status_code, 200)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.password['password']))
 
     def test_change_password_validation_error(self):
-        resp = self.client.patch(reverse('v1:users:profile-change-password'),
-                                 data={"old_password": self.old_password["old_password"],
-                                       "password": "a"})
+        resp = self.client.put(reverse('v1:users:profile-change-password'),
+                               data={"old_password": self.old_password["old_password"],
+                                     "password": "a"})
         self.assertEqual(resp.status_code, 400)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.password["old_password"]))
 
     def test_change_password_old_wrong(self):
-        resp = self.client.patch(reverse('v1:users:profile-change-password'),
-                                 data={"old_password": "wrong_old",
-                                       "password": "test_password12167"})
+        resp = self.client.put(reverse('v1:users:profile-change-password'),
+                               data={"old_password": "wrong_old",
+                                     "password": "test_password12167"})
         self.assertEqual(resp.status_code, 400)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.password["old_password"]))
@@ -79,7 +79,7 @@ class TestUserApiView(BaseAPITest):
         self.assertNotEqual(self.user.email, resp.data.serializer.data["email"])
 
     def test_my_profile(self):
-        resp = self.client.get('/v1/users/my-profile/') # this is simple path() URL
+        resp = self.client.get('/v1/users/my-profile/')  # this is simple path() URL
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'][0]['email'], self.user.email)

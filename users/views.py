@@ -49,7 +49,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         return Response(status=status.HTTP_200_OK)
 
     # @swagger_auto_schema(request_body=EditPasswordSerializer)
-    @action(methods=['PATCH'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password',
+    @action(methods=['PUT'], detail=False, serializer_class=EditPasswordSerializer, url_path='change-password',
             url_name='change-password')
     def change_password(self, request):
         user = self.get_object()
