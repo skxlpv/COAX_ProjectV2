@@ -40,7 +40,6 @@ class ArticlesViewSet(mixins.ListModelMixin,
     serializer_class = ArticlesSerializer
 
     def get_queryset(self):
-        # return Article.objects.all()
         return Article.objects.filter(hospital=self.request.user.hospital)
 
     def perform_create(self, serializer):

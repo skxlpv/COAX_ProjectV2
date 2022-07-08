@@ -31,7 +31,7 @@ class BaseAPITest(APITestCase):
         user.is_writer = is_writer
         return user
 
-    def create_and_login(self, email='test@test.com', password='1234512345qq',
+    def create_and_login(self, email='test@test.com', password='test_password',
                          first_name='test', last_name='test', hospital=None, is_writer=True,):
         user = self.create(email=email, password=password,
                            first_name=first_name, last_name=last_name, hospital=hospital, is_writer=is_writer)
