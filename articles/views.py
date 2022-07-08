@@ -1,8 +1,7 @@
-from rest_framework import mixins, serializers, viewsets, status
-from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-from api.permissions import IsWriter, IsLeader, IsHelper, IsCommon, HasArticleUpdate  # all the available permissions
+from api.permissions import IsWriter, HasArticleUpdate
 from articles.models import Article
 from articles.serializers import ArticlesSerializer
 

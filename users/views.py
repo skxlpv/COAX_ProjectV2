@@ -1,12 +1,8 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import serializers
 from rest_framework import status, mixins
-from rest_framework.decorators import api_view, action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.permissions import IsSameUser
 from users.models import User
@@ -23,11 +19,8 @@ class UsersViewSet(mixins.ListModelMixin,
     serializer_class = ProfileSerializer
 
 
-class ProfileViewSet(mixins.ListModelMixin,
-                     # mixins.UpdateModelMixin,
-                     GenericViewSet):
+class ProfileViewSet(GenericViewSet):
 
-    # serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated, IsSameUser)
 
     def get_queryset(self):
