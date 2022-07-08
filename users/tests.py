@@ -50,7 +50,7 @@ class TestUserApiView(BaseAPITest):
         self.assertTrue(self.user.check_password(self.password["old_password"]))
 
     def test_change_data(self):
-        resp = self.client.patch(reverse('v1:users:profile-edit'),
+        resp = self.client.patch(reverse('v1:users:profile'),
                                  data=self.data)
         self.assertEqual(resp.status_code, 200)
 
@@ -61,7 +61,7 @@ class TestUserApiView(BaseAPITest):
     def test_change_email_exist(self):
         self.user2 = self.create(email="exist@gmail.com")
 
-        resp = self.client.patch(reverse('v1:users:profile-edit'),
+        resp = self.client.patch(reverse('v1:users:profile'),
                                  data={"email": "exist@gmail.com"})
 
         self.assertEqual(resp.status_code, 400)
@@ -70,7 +70,7 @@ class TestUserApiView(BaseAPITest):
         self.assertNotEqual(self.user.email, self.user2.email)
 
     def test_change_email_validation_error(self):
-        resp = self.client.patch(reverse('v1:users:profile-edit'),
+        resp = self.client.patch(reverse('v1:users:profile'),
                                  data={"email": "a@a.a"})
 
         self.assertEqual(resp.status_code, 400)
