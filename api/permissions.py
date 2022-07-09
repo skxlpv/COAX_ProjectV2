@@ -87,3 +87,13 @@ class HasArticleUpdate(BasePermission):
             return False
 
         return True
+
+class HasEventDestroy(BasePermission):
+    message = "You're not the creator of this event"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ('DELETE'):
+            if obj.creator == request.user:
+                return True
+            return False
+        return True
