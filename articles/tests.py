@@ -81,6 +81,14 @@ class TestArticleApiView(BaseAPITest):
         resp = self.client.delete(reverse('v1:articles:articles-detail', args=(self.article.id,)))
         self.assertEqual(resp.status_code, 204)
 
+    def test_delete_not_author(self):
+        self.user2 = self.create(email='wrong_author@mail.com')
+        self.article.author = self.user2
+        self.article.save()
+
+        resp = self.client.delete(reverse('v1:articles:articles-detail', args=(self.article.id,)))
+        self.assertEqual(resp.status_code, 403)
+
     def test_update_not_author(self):
         self.user2 = self.create(email='wrong_author@mail.com')
         self.article.author = self.user2

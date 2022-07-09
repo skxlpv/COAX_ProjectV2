@@ -67,7 +67,7 @@ class IsSameUser(BasePermission):
     message = "You're not this user"
 
     def has_object_permission(self, request, view, obj):
-        if request.method in ('PUT', 'PATCH', 'DELETE'):
+        if request.method in ('PUT', 'PATCH',):
 
             if obj == request.user:
                 return True
