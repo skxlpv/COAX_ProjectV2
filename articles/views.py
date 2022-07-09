@@ -11,7 +11,7 @@ from articles.serializers import ArticlesSerializer, ArticleViewSerializer, Arti
 @method_decorator(name='create', decorator=swagger_auto_schema(
     request_body=ArticleViewSerializer, responses={200: ArticlesSerializer(many=True)}
 ))
-@method_decorator(namArticlee='update', decorator=swagger_auto_schema(
+@method_decorator(name='update', decorator=swagger_auto_schema(
     request_body=ArticleEditViewSerializer, responses={200: ArticlesSerializer(many=True)}
 ))
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
