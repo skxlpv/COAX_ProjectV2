@@ -20,16 +20,8 @@ class TestItemViewSet(BaseAPITest):
 
         self.user = self.create_and_login()
 
-        self.item_data = {
-            "category_name": 1,
-            "name": "Some Reanimation Item",
-            "description": "Some Description",
-            "quantity": 3000,
-            "price_of_one": "14.00"
-        }
-
     def test_list(self):
-        resp = self.client.get('/v1/management/items/', )
+        resp = self.client.get('/v1/management/items/')
 
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(resp.data['count'], Item.objects.all().count())
@@ -43,11 +35,20 @@ class TestItemViewSet(BaseAPITest):
         self.assertTrue(len(resp.data), 1)
 
     def test_create(self):
-        resp = self.client.post('/v1/management/items/', self.item_data)
-        self.assertEqual(resp.status_code, 201)
+        self.item_data = {
+            "category_name": self.category.id,
+            "name": "Some Reanimation Item",
+            "description": "Some Description",
+            "quantity": 3000,
+            "price_of_one": "14.00"
+        }
 
-        self.assertFalse(isinstance(resp.data, Item))
+        resp = self.client.post('/v1/management/items/', data=self.item_data)
+
+        self.assertEqual(resp.status_code, 201)
         self.assertTrue(resp.data['name'], self.item_data['name'])
+        self.assertTrue(resp.data['category_name'], self.item_data['category_name'])
+
 
     def test_create_no_required_data(self):
         self.invalid_item_data = {

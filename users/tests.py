@@ -79,7 +79,7 @@ class TestUserApiView(BaseAPITest):
         self.assertNotEqual(self.user.email, resp.data.serializer.data["email"])
 
     def test_my_profile(self):
-        resp = self.client.get('/v1/users/my-profile/')  # this is simple path() URL
+        resp = self.client.get('/v1/users/my-profile/')
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'][0]['email'], self.user.email)

@@ -24,7 +24,7 @@ api_urlpatterns_v1 = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('articles/', include(('articles.urls', 'articles'))),
     path('management/', include(('management.urls', 'management'))),
-    path('hospitals/', include('hospitals.urls'), name='hospitals'),
+    path('hospitals/', include(('hospitals.urls', 'hospitals'))),
     path('events/', include(('events.urls', 'events'))),
     path('patients/', include(('patients.urls', 'patients'))),
 ]

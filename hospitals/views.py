@@ -12,6 +12,7 @@ class CitiesViewSet(mixins.ListModelMixin,
     """
     Cities
     """
+
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [IsAuthenticated, ]
@@ -35,6 +36,7 @@ class DepartmentsView(mixins.ListModelMixin,
     """
     Departments
     """
+
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsAuthenticated, ]
