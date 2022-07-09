@@ -16,12 +16,35 @@ class UsersViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         return User.objects.filter(hospital=self.request.user.hospital)
+
     serializer_class = ProfileSerializer
 
 
-class ProfileViewSet(GenericViewSet):
+class ProfileViewSet(mixins.ListModelMixin,
+                     GenericViewSet):
     """
+    partial_update:
+    Change user data
 
+    ### Email must be unique
+    ### Validations in serializer:
+    * Default email validation
+    * Parsing to lower and checking in DB
+
+
+
+    change_password:
+    Change password
+
+    ### Password validation:
+
+    ```python
+    validators.validate_password()
+    ```
+
+    * Not common
+    * Not only numeric
+    * 8 or more symbols
     """
 
     permission_classes = (IsAuthenticated, IsSameUser)
