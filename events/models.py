@@ -2,19 +2,24 @@ from datetime import datetime
 
 from django.db import models
 
+from hospitals.models import Hospital
 from users.models import User
 
 
 class Event(models.Model):
-    TYPES = [
-        # may be expanded
-        (1, 'Seminar'),
-        (2, 'Conference'),
-    ]
+    SEMINAR = 1
+    CONFERENCE = 2
+    options = (
+        (SEMINAR, 'Seminar'),
+        (CONFERENCE, 'Conference'),
+    )
 
     title = models.CharField(max_length=150, blank=False, null=False)
+    type = models.PositiveIntegerField(choices=options, blank=False, null=False)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, default='')
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, default='')
+
     description = models.CharField(max_length=250, blank=True, null=True)
-    type = models.PositiveIntegerField(choices=TYPES, blank=False, null=False)
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
     start_time = models.DateTimeField(blank=True, null=True)
     end_time = models.DateTimeField(blank=True, null=True)
