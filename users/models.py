@@ -39,7 +39,7 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
-            # hospital_name=hospital_name,
+            # name=name,
             # role=role,
             **other_fields
         )

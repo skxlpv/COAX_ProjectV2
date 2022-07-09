@@ -16,26 +16,26 @@ class City(models.Model):
 
 
 class Department(models.Model):
-    department_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.department_name}"
+        return f"{self.name}"
 
     class Meta:
-        ordering = ('-department_name',)
+        ordering = ('-name',)
         verbose_name = _('Departament')
         verbose_name_plural = _('Departments')
 
 
 class Hospital(models.Model):
-    hospital_name = models.CharField(max_length=255)
-    hospital_departments = models.ManyToManyField(Department, related_name='departments')
+    name = models.CharField(max_length=255)
+    hospital_departments = models.ManyToManyField(Department, related_name='hospital_deps')
     region = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.hospital_name} | {self.region}"
+        return f"{self.name} | {self.region}"
 
     class Meta:
-        ordering = ('-region', 'hospital_name')
+        ordering = ('-region', 'name')
         verbose_name = _('Hospital')
         verbose_name_plural = _('Hospitals')
