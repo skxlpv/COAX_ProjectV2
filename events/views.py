@@ -12,7 +12,35 @@ class EventViewSet(mixins.ListModelMixin,
                    mixins.CreateModelMixin,
                    mixins.DestroyModelMixin,
                    GenericViewSet):
+    """
+    list:
+    List of events
+
+    ### Here user get list of events from hospital, where user belong
+
+    create:
+    Event
+
+    ### Create event. Title and Type of the event is required.
+
+    read:
+    Event
+
+    ### Get detailed information about specific event by {id}.
+    #### You should belong to the hospital, where this event is
+
+    delete:
+    Event
+
+    ### Delete event, if user is the creator of event
+
+    """
 
     permission_classes = (IsAuthenticated, )
-    queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user, hospital=self.request.user.hospital)
+
+    def get_queryset(self):
+        return Event.objects.filter(hospital=self.request.user.hospital)
