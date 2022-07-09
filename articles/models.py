@@ -24,9 +24,11 @@ class Article(models.Model):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
 
+    REVIEW = 'RW'
+    PUBLISHED = 'PB'
     options = (
-        ('review', 'On review'),
-        ('published', 'Published'),
+        (REVIEW, 'On review'),
+        (PUBLISHED, 'Published'),
     )
 
     category = models.ForeignKey(

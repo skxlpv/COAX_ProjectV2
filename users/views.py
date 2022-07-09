@@ -20,6 +20,9 @@ class UsersViewSet(mixins.ListModelMixin,
 
 
 class ProfileViewSet(GenericViewSet):
+    """
+
+    """
 
     permission_classes = (IsAuthenticated, IsSameUser)
 

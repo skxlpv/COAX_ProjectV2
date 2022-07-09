@@ -1,4 +1,5 @@
 from django.db import transaction
+from drf_yasg import openapi
 from rest_framework import serializers
 from rest_framework.fields import Field
 
@@ -33,3 +34,19 @@ class ArticlesSerializer(serializers.ModelSerializer):
         model = Article
         fields = ('id', 'status', 'title', 'excerpt', 'text', 'category', 'category_id', 'author', 'hospital')
         read_only_fields = ('id',)
+
+
+class ArticleViewSerializer(serializers.ModelSerializer):
+    category_id = serializers.IntegerField()
+
+    class Meta:
+        model = Article
+        fields = ('id', 'title', 'excerpt', 'text', 'category_id',)
+
+
+class ArticleEditViewSerializer(serializers.ModelSerializer):
+    category_id = serializers.IntegerField()
+
+    class Meta:
+        model = Article
+        fields = ('id', 'title', 'excerpt', 'text', 'category_id', 'status')
