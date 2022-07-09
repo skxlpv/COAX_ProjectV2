@@ -5,8 +5,8 @@ from hospitals.models import City, Hospital, Department
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ('id', 'department_name')
-        read_only_fields = ('id', 'department_name')
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -22,5 +22,5 @@ class HospitalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hospital
-        fields = ('id', 'hospital_name', 'region', 'hospital_departments')
+        fields = ('id', 'name', 'region', 'hospital_departments')
         read_only_fields = ('id', 'hospital_departments')
