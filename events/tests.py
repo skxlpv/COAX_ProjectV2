@@ -4,19 +4,24 @@ from mixer.backend.django import mixer
 
 from api.tests import BaseAPITest
 from events.models import Event
+from hospitals.models import Hospital
 
 
 class TestEventViewSet(BaseAPITest):
 
     def setUp(self):
-        self.event = mixer.blend(Event)
+        self.hospital = mixer.blend(Hospital)
 
-        self.user = self.create_and_login()
+        self.user1 = self.create_and_login(email='someemail@email.com', hospital=self.hospital)
+        self.user2 = self.create_and_login(email='someotheremail@email.com', hospital=self.hospital)
+
+        self.event = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
 
     def test_create(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1
+            'type': 1,
+            'participants': []
         }
 
         resp = self.client.post('/v1/events/', data=self.event_data)
@@ -25,9 +30,9 @@ class TestEventViewSet(BaseAPITest):
         self.assertTrue(resp.data['title'], self.event_data['title'])
 
     def test_list(self):
-        self.event1 = mixer.blend(Event)
-        self.event2 = mixer.blend(Event)
-        self.event3 = mixer.blend(Event)
+        self.event1 = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
+        self.event2 = mixer.blend(Event, creator=self.user2, hospital=self.hospital)
+        self.event3 = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
 
         resp = self.client.get('/v1/events/')
 
