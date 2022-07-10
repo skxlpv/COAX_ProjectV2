@@ -20,7 +20,7 @@ class EventViewSet(mixins.ListModelMixin,
     create:
     Event
 
-    ### Create event. Title, Type and Participants(may be blank) of the event is required.
+    ### Create event. Title, Type and Participants(should be blank) of the event is required.
 
     read:
     Event

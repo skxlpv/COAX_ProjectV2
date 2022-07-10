@@ -39,8 +39,6 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
-            # name=name,
-            # role=role,
             **other_fields
         )
         user.set_password(password)
@@ -56,7 +54,7 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
-            **other_fields  # had to add other field in order to setup user for the tests
+            **other_fields
         )
 
         user.set_password(password)
@@ -80,9 +78,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     HELPER = "HP"
     COMMON = "CM"
     ROLE_CHOICES = [
-        (LEADER, "Голова"),
-        (HELPER, "Помічник"),
-        (COMMON, "Дятел")
+        (LEADER, "Leader"),
+        (HELPER, "Assistant"),
+        (COMMON, "Common doctor")
     ]
     role = models.CharField(
         max_length=2,

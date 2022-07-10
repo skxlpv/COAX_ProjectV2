@@ -1,5 +1,4 @@
-from django.urls import path
-from rest_framework.routers import SimpleRouter, DefaultRouter
+from rest_framework.routers import DefaultRouter
 
 from hospitals.views import CitiesViewSet, HospitalsViewSet, DepartmentsView
 

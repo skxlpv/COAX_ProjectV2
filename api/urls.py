@@ -1,7 +1,5 @@
 from django.urls import path
-# from .views import PostList, PostDetail
-#
-# app_name = 'api'
+
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from api.views import BlackListTokenView

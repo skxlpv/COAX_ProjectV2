@@ -20,10 +20,7 @@ class PatientViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         queryset = Patient.objects.all()
-        doctor = self.request.query_params.get('doctor') # get doctor
-
-        # if there is "/?doctor=somename&somelastname" in url,
-        # search all patients by their doctor's name and lastname
+        doctor = self.request.query_params.get('doctor')
         if doctor is not None:
             queryset = queryset.filter(doctor__first_name__startswith=doctor) | \
                        queryset.filter(doctor__last_name__startswith=doctor)

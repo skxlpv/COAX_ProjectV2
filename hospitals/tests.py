@@ -1,5 +1,4 @@
 from mixer.backend.django import mixer
-from rest_framework.reverse import reverse
 
 from api.tests import BaseAPITest
 from hospitals.models import Hospital, City, Department

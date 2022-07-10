@@ -1,8 +1,5 @@
-from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APITestCase
-
-# Create your tests here.
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import AccessToken
 

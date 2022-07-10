@@ -82,21 +82,14 @@ class TestPatientViewSet(BaseAPITest):
         self.assertEqual(self.patient1.receipt, patch_data['receipt'])
 
     def test_update_no_data(self):
-        # start initializing default data
         self.valid_patch_data = {
             "diagnosis": "DIAGNOSIS",
             "receipt": "RECEIPT"
         }
 
         resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data=self.valid_patch_data)
-        # end initializing default data
 
-        self.invalid_patch_data = {
-            # NO DIAGNOSIS AND RECEIPT, NO DATA AT ALL
-        }
-
-        # the DIAGNOSIS and RECEIPT data stays the same after no data was passed
-        resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data=self.invalid_patch_data)
+        resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data={})
 
         self.assertEqual(resp.status_code, 200)
 
@@ -131,21 +124,3 @@ class TestPatientViewSet(BaseAPITest):
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['created_at'], f"{self.patient_data['created_at']}")
-
-    # def test_filter_by_first_name(self):
-    #     self.doctor = self.create_and_login(hospital=self.hospital1,
-    #                                         email='testemail@mail.com',
-    #                                         first_name='TESTNAME')
-    #     self.patient_data = {
-    #         "first_name": "Test",
-    #         "last_name": "TestLastName",
-    #         "doctor": self.doctor.id,
-    #         "phone_number": "+380960000005"
-    #     }
-    #
-    #     self.patient1 = self.client.post('/v1/patients/', data=self.patient_data)
-    #     self.patient2 = self.client.post('/v1/patients/', data=self.patient_data)
-    #
-    #     resp = self.client.get(f'/v1/patients/?doctor={self.doctor.first_name}')
-    #     print(resp.data)
-    #     self.assertEqual(resp.data['doctor'], self.doctor.id)

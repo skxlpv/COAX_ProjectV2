@@ -1,12 +1,9 @@
-from django.db import transaction
-from drf_yasg import openapi
 from rest_framework import serializers
 from rest_framework.fields import Field
 
 from hospitals.serializers import HospitalSerializer
 from users.serializers import AuthorSerializer
 from .models import Article, Category
-
 
 Field.default_error_messages = {
     'category': "No such category",

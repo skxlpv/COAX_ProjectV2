@@ -1,16 +1,7 @@
 from drf_yasg.inspectors import SwaggerAutoSchema
 from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_ARRAY, TYPE_STRING
-from rest_framework import serializers
 
 NO_CONTENT = 'NO_CONTENT'
-
-
-class EmptySchema(serializers.Serializer):
-    pass
-
-
-class DetailSchema(serializers.Serializer):
-    detail = serializers.CharField()
 
 
 class CustomSwaggerAutoSchema(SwaggerAutoSchema):

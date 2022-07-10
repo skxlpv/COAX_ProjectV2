@@ -49,7 +49,6 @@ class TestItemViewSet(BaseAPITest):
         self.assertTrue(resp.data['name'], self.item_data['name'])
         self.assertTrue(resp.data['category_name'], self.item_data['category_name'])
 
-
     def test_create_no_required_data(self):
         self.invalid_item_data = {
             "name": "Some Reanimation Item",
@@ -76,20 +75,12 @@ class TestItemViewSet(BaseAPITest):
         self.assertEqual(self.item.quantity, self.patch_data['quantity'])
 
     def test_partial_update_validation_error(self):
-        self.invalid_patch_data = {
-            # NO QUANTITY
-        }
-
-        resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.invalid_patch_data)
+        resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data={})
 
         self.assertEqual(resp.status_code, 400)
 
     def test_default_after_patch(self):
-        self.invalid_patch_data = {
-            # NO QUANTITY
-        }
-
-        resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.invalid_patch_data)
+        resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data={})
 
         self.item.refresh_from_db()
         self.assertEqual(self.item.quantity, 1)

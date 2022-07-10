@@ -29,7 +29,6 @@ class CitiesViewSet(mixins.ListModelMixin,
         queryset = City.objects.all()
         city = self.request.query_params.get('city')
 
-        # if there is "/city/?city=some_city" in url
         if city is not None:
             queryset = queryset.filter(city__istartswith=city)
         return queryset
@@ -88,7 +87,6 @@ class DepartmentsView(mixins.ListModelMixin,
         queryset = Department.objects.all()
         department = self.request.query_params.get('name')
 
-        # if there is "/department/?name=some_dep" in url
         if department is not None:
             queryset = queryset.filter(name__istartswith=department)
         return queryset

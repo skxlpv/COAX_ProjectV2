@@ -21,7 +21,6 @@ class PatientSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        # other way updating it updates only one field, while the other becomes null
         instance.receipt = validated_data.get('receipt', instance.receipt)
         instance.diagnosis = validated_data.get('diagnosis', instance.diagnosis)
         instance.save()
