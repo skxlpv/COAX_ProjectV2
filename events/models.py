@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db import models
 
 from hospitals.models import Hospital
@@ -7,11 +5,13 @@ from users.models import User
 
 
 class Event(models.Model):
-    SEMINAR = 1
-    CONFERENCE = 2
+    SEMINAR = 'SM'
+    CONFERENCE = 'CN'
+    ANOTHER = 'AN'
     options = (
         (SEMINAR, 'Seminar'),
         (CONFERENCE, 'Conference'),
+        (ANOTHER, 'Another')
     )
 
     title = models.CharField(max_length=150, blank=False, null=False)
