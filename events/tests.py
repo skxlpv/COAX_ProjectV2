@@ -20,8 +20,7 @@ class TestEventViewSet(BaseAPITest):
     def test_create(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1,
-            'participants': []
+            'type': 'OT'
         }
 
         resp = self.client.post('/v1/events/', data=self.event_data)
@@ -54,7 +53,7 @@ class TestEventViewSet(BaseAPITest):
     def test_start_time_correct_format(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1,
+            'type': 'OT',
             'start_time': datetime.date(2000, 1, 1)
         }
 
@@ -66,7 +65,7 @@ class TestEventViewSet(BaseAPITest):
     def test_end_time_correct_format(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1,
+            'type': 'OT',
             'end_time': datetime.date(2000, 1, 1)
         }
 
@@ -78,9 +77,9 @@ class TestEventViewSet(BaseAPITest):
     def test_create_no_time(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1,
+            'type': 'OT',
             'start_time': '',
-            'end_time': '',
+            'end_time': ''
         }
 
         resp = self.client.post('/v1/events/', data=self.event_data)
@@ -92,7 +91,7 @@ class TestEventViewSet(BaseAPITest):
     def test_blank_participants(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 1,
+            'type': 'OT',
             'participants': []
         }
 
@@ -101,29 +100,21 @@ class TestEventViewSet(BaseAPITest):
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['participants'], [])
 
-    def test_incorrect_event_type(self):
+    def test_default_event_type(self):
+        self.default_value = 'OT'
+
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 3
+            'type': ''
         }
 
         resp = self.client.post('/v1/events/', data=self.event_data)
-        self.assertEqual(resp.status_code, 400)
 
-        ######
-        self.event_data = {
-            'title': 'TESTTITLE',
-            'type': 0
-        }
-
-        resp = self.client.post('/v1/events/', data=self.event_data)
-        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(resp.data['type'], self.default_value)
 
     def test_create_error_no_required_fields(self):
-        self.event_data = {
-            # 'title': 'TESTTITLE',
-            # 'type': 1
-        }
+        self.event_data = {}
 
         resp = self.client.post('/v1/events/', data=self.event_data)
 

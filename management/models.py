@@ -45,8 +45,10 @@ class Item(models.Model):
 
     @property
     def full_price(self):
-        price = self.quantity * self.price_of_one
-        return price
+        if self.price_of_one:
+            price = self.quantity * self.price_of_one
+            return price
+        return 0
 
     class Meta:
         verbose_name = 'Item'

@@ -13,7 +13,10 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ('id', 'category_name', 'name',
                   'description', 'quantity', 'price_of_one')
-        extra_kwargs = {'quantity': {'required': True}}
+        extra_kwargs = {
+            'quantity': {'required': True},
+            'price_of_one': {'required': True}
+        }
 
     def update(self, item, validated_data):
         quantity = self.validated_data.get('quantity')
