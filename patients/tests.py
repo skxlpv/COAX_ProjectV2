@@ -124,3 +124,15 @@ class TestPatientViewSet(BaseAPITest):
 
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.data['created_at'], f"{self.patient_data['created_at']}")
+
+    def test_discharging(self):
+        status = True
+        self.patient_data = {
+            "is_discharged": status
+        }
+        self.patient = mixer.blend(Patient, is_discharged=False)
+
+        resp = self.client.patch(f'/v1/patients/{self.patient.id}/', data=self.patient_data)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['is_discharged'], True)
