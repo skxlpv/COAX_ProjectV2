@@ -12,6 +12,21 @@ from users.serializers import ProfileSerializer, EditPasswordSerializer, EditUse
 class UsersViewSet(mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
                    GenericViewSet):
+
+    """
+    list:
+    List of profiles
+
+    ### Get all the profiles from current hospital
+
+    read:
+    Single profile
+
+    ### Get detailed information about user by {id}.
+    #### You should belong to the hospital, where this user is
+
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
@@ -23,6 +38,11 @@ class UsersViewSet(mixins.ListModelMixin,
 class ProfileViewSet(mixins.ListModelMixin,
                      GenericViewSet):
     """
+    list:
+    My profile
+
+    ### Get the profile of the current user
+
     partial_update:
     Change user data
 
@@ -30,7 +50,6 @@ class ProfileViewSet(mixins.ListModelMixin,
     ### Validations in serializer:
     * Default email validation
     * Parsing to lower and checking in DB
-
 
 
     change_password:

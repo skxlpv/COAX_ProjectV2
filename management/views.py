@@ -66,6 +66,8 @@ class CategoryViewSet(mixins.ListModelMixin,
     list:
     List of categories
 
+    ### Get list of all the categories of current hospital
+
     read:
     Single category
 
