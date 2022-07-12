@@ -6,6 +6,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from users.views import ProfileViewSet
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Med Site API",
@@ -25,6 +27,11 @@ api_urlpatterns_v1 = [
     path('hospitals/', include(('hospitals.urls', 'hospitals'))),
     path('events/', include(('events.urls', 'events'))),
     path('patients/', include(('patients.urls', 'patients'))),
+
+    path(r'my-profile/', ProfileViewSet.as_view({'get': 'list', "patch": "partial_update"}),
+         name='profile'),
+    path(r'my-profile/change-password', ProfileViewSet.as_view({"put": "change_password"}),
+         name='profile-change-password')
 ]
 
 urlpatterns = [
