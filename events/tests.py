@@ -20,13 +20,15 @@ class TestEventViewSet(BaseAPITest):
     def test_create(self):
         self.event_data = {
             'title': 'TESTTITLE',
-            'type': 'OT'
+            'type': 'OT',
+            'hospital': self.hospital
         }
 
         resp = self.client.post('/v1/events/', data=self.event_data)
 
         self.assertEqual(resp.status_code, 201)
-        self.assertTrue(resp.data['title'], self.event_data['title'])
+        self.assertEqual(resp.data['title'], self.event_data['title'])
+        self.assertEqual(resp.data['hospital']['id'], self.hospital.id)
 
     def test_list(self):
         self.event1 = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
