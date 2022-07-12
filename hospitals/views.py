@@ -16,7 +16,7 @@ class CitiesViewSet(mixins.ListModelMixin,
     ### Here user gets a list of all cities, that can be filtered by URL
 
     read:
-    City
+    Single city
 
     ### Get detailed information about specific city by {id}.
 
@@ -44,7 +44,7 @@ class HospitalsViewSet(mixins.ListModelMixin,
     ### Here user gets a list of all hospitals, that can be filtered by URL
 
     read:
-    Hospital
+    Single hospital
 
     ### Get detailed information about specific hospital by {id}.
 
@@ -74,7 +74,7 @@ class DepartmentsView(mixins.ListModelMixin,
     that are present in current hospital and can be filtered by URL
 
     read:
-    Department
+    Single department
 
     ### Get detailed information about specific department by {id}.
 

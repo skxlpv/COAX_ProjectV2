@@ -2,9 +2,9 @@ from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from core.pagination import SmallResults, StandardResults
+from core.pagination import StandardResults, SmallResults
 from management.models import Item, Category
-from management.serializers import ItemSerializer, CategorySerializer
+from management.serializers import CategorySerializer, ItemSerializer
 
 
 class ItemViewSet(mixins.ListModelMixin,
@@ -15,46 +15,48 @@ class ItemViewSet(mixins.ListModelMixin,
                   GenericViewSet):
     """
     list:
+    List of Items
 
-    Item List
-
-    GET list of all the items
-
-    retrieve:
-
-    Item Detail
-
-    GET detailed view of a single item
-
-    destroy:
-
-    Item Destroy
-
-    DELETEs a single item
-
-    update:
-
-    Item Update
-
-    PUT item's quantity field only...¯|_ (ツ) _/¯
-
-    partial_update:
-
-    Item Patch
-
-    PATCH item's quantity field only
+    ### Here user get list of items from hospital, where user belong
 
     create:
+    Item
 
-    Item Create
+    ### Create new item, by giving name, hospital, category and quantity.
+    Hospital will be taken automatically
 
-    POST item
+    read:
+    Single item
+
+    ### Get detailed information about specific item by {id}.
+    #### You should belong to the hospital, where this item is
+
+    update:
+    Item
+
+    ### User must belong to this hospital
+
+    partial_update:
+    Item
+
+    ### User must belong to this hospital
+
+    delete:
+    Delete item
+
+    ### Delete item, if user belong to the hospital
+
     """
 
     permission_classes = [IsAuthenticated, ]
-    queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    pagination_class = SmallResults
+    pagination_class = StandardResults
+
+    def perform_create(self, serializer):
+        serializer.save(hospital=self.request.user.hospital)
+
+    def get_queryset(self):
+        return Item.objects.all().filter(hospital=self.request.user.hospital)
 
 
 class CategoryViewSet(mixins.ListModelMixin,
@@ -62,20 +64,19 @@ class CategoryViewSet(mixins.ListModelMixin,
                       GenericViewSet):
     """
     list:
+    List of categories
 
-    Category List
+    read:
+    Single category
 
-    GET list of all the categories
+    ### Get detailed information about specific category by {id}.
+    #### You should belong to the hospital, where this category is
 
-    retrieve:
-
-    Category Detail
-
-    GET detailed view of a single category
     """
 
     permission_classes = [IsAuthenticated, ]
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    pagination_class = StandardResults
+    pagination_class = SmallResults
 
+    def get_queryset(self):
+        return Category.objects.all().filter(hospital=self.request.user.hospital)

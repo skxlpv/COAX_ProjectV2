@@ -1,15 +1,14 @@
 from django.db import models
 
-from hospitals.models import Department
+from hospitals.models import Department, Hospital
 
 
 class Category(models.Model):
     category_name = models.CharField(max_length=50,
-                                     unique=True,
                                      verbose_name='Category title')
-    department = models.ForeignKey(Department, related_name='categories',
-                                   on_delete=models.CASCADE, default=1,
-                                   verbose_name='Department')
+    hospital = models.ForeignKey(Hospital, related_name='categories',
+                                 on_delete=models.CASCADE,
+                                 verbose_name='Hospital')
 
     class Meta:
         verbose_name = 'Category'
@@ -24,9 +23,11 @@ class Item(models.Model):
     name = models.CharField(max_length=120,
                             verbose_name='Item title',
                             unique=True)
-    category_name = models.ForeignKey(Category, related_name="items",
-                                      on_delete=models.CASCADE,
-                                      verbose_name='Belongs to')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 verbose_name='Category', unique=False)
+    hospital = models.ForeignKey(Hospital, related_name='items',
+                                 on_delete=models.CASCADE,
+                                 verbose_name='Hospital')
     description = models.CharField(max_length=250,
                                    verbose_name='Item description',
                                    default='', null=True, blank=True)

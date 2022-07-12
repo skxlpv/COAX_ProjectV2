@@ -11,8 +11,8 @@ Field.default_error_messages = {
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('id', 'category_name', 'name',
-                  'description', 'quantity', 'price_of_one')
+        fields = ('id', 'hospital', 'name', 'category',
+                  'description', 'quantity', 'price_of_one',)
         extra_kwargs = {
             'quantity': {'required': True},
             'price_of_one': {'required': True}
@@ -33,5 +33,4 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'category_name', 'department', 'items')
-        read_only_fields = ('department', 'items')
+        fields = ('id', 'hospital', 'items')

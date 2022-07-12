@@ -4,7 +4,7 @@ from management.models import Category, Item
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "category_name",
+    list_display = ("name", "hospital",
                     "description", "quantity",
                     "price_of_one", "full_usd")
 

@@ -11,14 +11,13 @@ class TestItemViewSet(BaseAPITest):
         self.department1 = mixer.blend(Department)
         self.department2 = mixer.blend(Department)
         self.city = mixer.blend(City)
+
         self.hospital = mixer.blend(Hospital)
-        self.hospital.hospital_departments.set([self.department1.pk, self.department2.pk])
 
-        self.category = mixer.blend(Category, department=self.department2)
-        self.item = mixer.blend(Item, category_name=self.category)
-        self.category.items.set([self.item])
+        self.user = self.create_and_login(hospital=self.hospital)
 
-        self.user = self.create_and_login()
+        self.category = mixer.blend(Category, hospital=self.hospital)
+        self.item = mixer.blend(Item, category=self.category, hospital=self.hospital)
 
     def test_list(self):
         resp = self.client.get('/v1/management/items/')
@@ -36,22 +35,21 @@ class TestItemViewSet(BaseAPITest):
 
     def test_create(self):
         self.item_data = {
-            "category_name": self.category.id,
-            "name": "Some Reanimation Item",
-            "description": "Some Description",
+            "hospital": self.hospital.id,
+            "name": "aaa",
+            "category": self.category.id,
             "quantity": 3000,
-            "price_of_one": "14.00"
+            "price_of_one": ""
         }
 
         resp = self.client.post('/v1/management/items/', data=self.item_data)
 
         self.assertEqual(resp.status_code, 201)
         self.assertTrue(resp.data['name'], self.item_data['name'])
-        self.assertTrue(resp.data['category_name'], self.item_data['category_name'])
+        self.assertTrue(resp.data['category'], self.item_data['category'])
 
     def test_create_no_required_data(self):
         self.invalid_item_data = {
-            "name": "Some Reanimation Item",
             "description": "Some Description",
             "price_of_one": "14.00"
         }
@@ -95,40 +93,26 @@ class TestItemViewSet(BaseAPITest):
         resp = self.client.get('/v1/management/items/')
         self.assertEqual(resp.status_code, 401)
 
-        resp = self.client.get(f'/v1/management/items/{self.item.id}/')
-        self.assertEqual(resp.status_code, 401)
-
-        resp = self.client.patch(f'/v1/management/items/{self.item.id}/', data=self.patch_data)
-        self.assertEqual(resp.status_code, 401)
-
-        resp = self.client.get('/v1/management/categories/')
-        self.assertEqual(resp.status_code, 401)
-
-        resp = self.client.get(f'/v1/management/categories/{self.item.id}/')
-        self.assertEqual(resp.status_code, 401)
-
 
 #############################################################
 
 class TestCategoryViewSet(BaseAPITest):
 
     def setUp(self):
-        self.department = mixer.blend(Department)
+        self.hospital = mixer.blend(Hospital)
 
-        self.category = mixer.blend(Category, department=self.department)
-        self.item = mixer.blend(Item, category_name=self.category)
-        self.category.items.set([self.item])
+        self.user = self.create_and_login(hospital=self.hospital)
 
-        self.user = self.create_and_login()
+        self.category = mixer.blend(Category, hospital=self.user.hospital)
 
     def test_list(self):
         resp = self.client.get('/v1/management/categories/')
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue(len(resp.data['results']), Item.objects.all().count())
+        self.assertTrue(resp.data['results'], Item.objects.all().count())
 
     def test_detail(self):
         resp = self.client.get(f'/v1/management/categories/{self.category.id}/')
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['id'], self.item.id)
+        self.assertEqual(resp.data['id'], self.category.id)
         self.assertTrue(len(resp.data), 1)
