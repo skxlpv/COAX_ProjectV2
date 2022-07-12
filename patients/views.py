@@ -10,7 +10,42 @@ class PatientViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.CreateModelMixin,
                      mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
                      GenericViewSet):
+    """
+     list:
+     Get list of articles
+
+     ### Here user get list of articles from hospital, where user belong
+
+     create:
+     Create article
+
+     ### Create new article, by giving text, excerpt, text and category. Author and hospital will be taken automatically
+     # User must have permission "isWriter"
+
+     read:
+     Get article
+
+     ### Get detailed information about specific article by {id}.
+     #### You should belong to the hospital, where this article is
+
+     update:
+     Update article
+
+     ### User must be original author of article
+
+     partial_update:
+     Partially update article
+
+     ### User must be original author of article
+
+     delete:
+     Delete article
+
+     ### Delete article, if user is the author of article
+
+     """
 
     permission_classes = (IsAuthenticated,)
     serializer_class = PatientSerializer

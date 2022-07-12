@@ -44,7 +44,7 @@ class TestEventViewSet(BaseAPITest):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['title'], self.event.title)
 
-    def test_delete(self):
+    def test_destroy(self):
         resp = self.client.delete(f'/v1/events/{self.event.id}/')
 
         self.assertEqual(resp.status_code, 204)

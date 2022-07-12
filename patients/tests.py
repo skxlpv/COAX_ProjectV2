@@ -16,7 +16,7 @@ class TestPatientViewSet(BaseAPITest):
         self.hospital1.hospital_departments.set([self.department.pk])
         self.hospital2.hospital_departments.set([self.department.pk])
 
-        self.patient1 = mixer.blend(Patient, phone_number='+3809600000000')
+        self.patient1 = mixer.blend(Patient, phone_number='+3809600000000', email='test@test.com')
         self.patient2 = mixer.blend(Patient, phone_number='+3809600000001')
 
         self.user = self.create_and_login()
@@ -38,6 +38,12 @@ class TestPatientViewSet(BaseAPITest):
         patient = Patient.objects.filter(first_name='Test', last_name='TestLastName')
 
         self.assertTrue(patient.exists())
+
+    def test_destroy(self):
+        resp = self.client.delete(f'/v1/patients/{self.patient1.id}/')
+
+        self.assertEqual(resp.status_code, 204)
+        self.assertFalse(Patient.objects.filter(email=self.patient1.email).exists())
 
     def test_create_no_phone(self):
         self.patient_data = {
