@@ -11,11 +11,7 @@ class TestEventViewSet(BaseAPITest):
 
     def setUp(self):
         self.hospital = mixer.blend(Hospital)
-
-        self.user1 = self.create_and_login(email='someemail@email.com', hospital=self.hospital)
-        self.user2 = self.create_and_login(email='someotheremail@email.com', hospital=self.hospital)
-
-        self.event = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
+        self.user = self.create_and_login(email='someyetanoteremail@email.com', hospital=self.hospital)
 
     def test_create(self):
         self.event_data = {
@@ -31,6 +27,9 @@ class TestEventViewSet(BaseAPITest):
         self.assertEqual(resp.data['hospital']['id'], self.hospital.id)
 
     def test_list(self):
+        self.user1 = self.create_and_login(email='someemail@email.com', hospital=self.hospital)
+        self.user2 = self.create_and_login(email='someotheremail@email.com', hospital=self.hospital)
+
         self.event1 = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
         self.event2 = mixer.blend(Event, creator=self.user2, hospital=self.hospital)
         self.event3 = mixer.blend(Event, creator=self.user1, hospital=self.hospital)
@@ -41,12 +40,16 @@ class TestEventViewSet(BaseAPITest):
         self.assertEqual(resp.data['count'], Event.objects.all().count())
 
     def test_detail(self):
+        self.event = mixer.blend(Event, creator=self.user, hospital=self.hospital)
+
         resp = self.client.get(f'/v1/events/{self.event.id}/')
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['title'], self.event.title)
 
     def test_destroy(self):
+        self.event = mixer.blend(Event, creator=self.user, hospital=self.hospital)
+
         resp = self.client.delete(f'/v1/events/{self.event.id}/')
 
         self.assertEqual(resp.status_code, 204)

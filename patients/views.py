@@ -2,6 +2,7 @@ from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
+from api.permissions import HasPatientDestroy, HasPatientUpdate
 from patients.models import Patient
 from patients.serializers import PatientSerializer
 
@@ -14,47 +15,46 @@ class PatientViewSet(mixins.ListModelMixin,
                      GenericViewSet):
     """
      list:
-     Get list of articles
+     List of patients
 
-     ### Here user get list of articles from hospital, where user belong
+     ### Here user gets list of his own patients from hospital, where they belong
 
      create:
-     Create article
+     Patient
 
-     ### Create new article, by giving text, excerpt, text and category. Author and hospital will be taken automatically
-     # User must have permission "isWriter"
+     ### Create new patient, required first_name, last_name and an email. Doctor and hospital are taken automaticaly
 
      read:
-     Get article
+     Single patient
 
-     ### Get detailed information about specific article by {id}.
-     #### You should belong to the hospital, where this article is
+     ### Get detailed information about specific patient by {id}.
+     #### You should belong to the hospital, where this patient is
 
      update:
-     Update article
+     Patient
 
-     ### User must be original author of article
+     ### Diagnosis and receipt can be updated
 
      partial_update:
-     Partially update article
+     Patient
 
-     ### User must be original author of article
+     ### Diagnosis and receipt can be updated
 
      delete:
-     Delete article
+     Patient
 
-     ### Delete article, if user is the author of article
+     ### Delete patient
 
      """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, HasPatientDestroy, HasPatientUpdate)
     serializer_class = PatientSerializer
 
     def perform_create(self, serializer):
-        serializer.save(doctor=self.request.user)
+        serializer.save(doctor=self.request.user, hospital=self.request.user.hospital)
 
     def get_queryset(self):
-        queryset = Patient.objects.all()
+        queryset = Patient.objects.all().filter(hospital=self.request.user.hospital)
         doctor = self.request.query_params.get('doctor')
         if doctor is not None:
             queryset = queryset.filter(doctor__first_name__startswith=doctor) | \

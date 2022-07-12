@@ -11,33 +11,39 @@ class TestPatientViewSet(BaseAPITest):
     def setUp(self):
         self.department = mixer.blend(Department)
         self.city = mixer.blend(City)
+
+        self.hospital = mixer.blend(Hospital)
         self.hospital1 = mixer.blend(Hospital)
         self.hospital2 = mixer.blend(Hospital)
         self.hospital1.hospital_departments.set([self.department.pk])
         self.hospital2.hospital_departments.set([self.department.pk])
 
-        self.patient1 = mixer.blend(Patient, phone_number='+3809600000000', email='test@test.com')
+        self.user = self.create_and_login(hospital=self.hospital, email='test3@test3.com')
+
+        self.patient1 = mixer.blend(Patient, phone_number='+3809600000000', email='test@test.com',
+                                    hospital=self.hospital, doctor=self.user, diagnosis='DIAGNOSIS',
+                                    receipt='RECEIPT', is_discharged=False)
         self.patient2 = mixer.blend(Patient, phone_number='+3809600000001')
-
-        self.user = self.create_and_login()
-
-    def test_create(self):
-        self.user = self.create_and_login(hospital=self.hospital1, email='test3@test3.com')
 
         self.patient_data = {
             "first_name": "Test",
             "last_name": "TestLastName",
             "phone_number": "+380960000000",
-            "doctor": self.user.id
+            "doctor": self.user.id,
+            "hospital": self.hospital.id
         }
 
+    def test_create(self):
         resp = self.client.post('/v1/patients/', self.patient_data)
-
         self.assertEqual(resp.status_code, 201)
 
         patient = Patient.objects.filter(first_name='Test', last_name='TestLastName')
-
         self.assertTrue(patient.exists())
+
+        self.assertEqual(resp.data['first_name'], self.patient_data['first_name'])
+        self.assertEqual(resp.data['last_name'], self.patient_data['last_name'])
+        self.assertEqual(resp.data['doctor'], self.patient_data['doctor'])
+        self.assertEqual(resp.data['hospital'], self.patient_data['hospital'])
 
     def test_destroy(self):
         resp = self.client.delete(f'/v1/patients/{self.patient1.id}/')
@@ -50,6 +56,7 @@ class TestPatientViewSet(BaseAPITest):
             "first_name": "Test",
             "last_name": "TestLastName",
             "doctor": self.user.id,
+            "hospital": self.hospital1.id
         }
 
         resp = self.client.post('/v1/patients/', self.patient_data)
@@ -93,8 +100,6 @@ class TestPatientViewSet(BaseAPITest):
             "receipt": "RECEIPT"
         }
 
-        resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data=self.valid_patch_data)
-
         resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data={})
 
         self.assertEqual(resp.status_code, 200)
@@ -109,6 +114,7 @@ class TestPatientViewSet(BaseAPITest):
             "first_name": "Test",
             "last_name": "TestLastName",
             "doctor": self.user.id,
+            "hospital": self.hospital1.id,
             "phone_number": "+380960000000"
         }
 
@@ -122,7 +128,7 @@ class TestPatientViewSet(BaseAPITest):
             "first_name": "Test",
             "last_name": "TestLastName",
             "doctor": self.user.id,
-            "phone_number": "",
+            "hospital": self.hospital.id,
             "created_at": datetime.date(2020, 2, 24)
         }
 
@@ -136,9 +142,8 @@ class TestPatientViewSet(BaseAPITest):
         self.patient_data = {
             "is_discharged": status
         }
-        self.patient = mixer.blend(Patient, is_discharged=False)
 
-        resp = self.client.patch(f'/v1/patients/{self.patient.id}/', data=self.patient_data)
+        resp = self.client.patch(f'/v1/patients/{self.patient1.id}/', data=self.patient_data)
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['is_discharged'], True)

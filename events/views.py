@@ -2,6 +2,7 @@ from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
+from api.permissions import HasEventDestroy, HasEventUpdate
 from events.models import Event
 from events.serializers import EventSerializer
 
@@ -23,7 +24,7 @@ class EventViewSet(mixins.ListModelMixin,
     ### Create event. Title, Type and Participants(should be blank) of the event is required.
 
     read:
-    Event
+    Single event
 
     ### Get detailed information about specific event by {id}.
     #### You should belong to the hospital, where this event is
@@ -35,7 +36,7 @@ class EventViewSet(mixins.ListModelMixin,
 
     """
 
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, HasEventDestroy, HasEventUpdate)
     serializer_class = EventSerializer
 
     def perform_create(self, serializer):

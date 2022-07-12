@@ -12,6 +12,7 @@ class Patient(models.Model):
     email = models.EmailField(max_length=200, null=True, unique=True)
 
     doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='hospital')
     diagnosis = models.TextField(blank=True, null=True)
     receipt = models.TextField(blank=True, null=True)
 

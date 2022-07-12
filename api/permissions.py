@@ -74,12 +74,47 @@ class HasArticleUpdate(BasePermission):
         return True
 
 
+class HasEventUpdate(BasePermission):
+    message = "You're not the creator of this event"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ('PUT', 'PATCH'):
+            if obj.creator == request.user:
+                return True
+            return False
+
+        return True
+
+
+class HasPatientUpdate(BasePermission):
+    message = "You're not the doctor of this patient"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ('PUT', 'PATCH'):
+            if obj.doctor == request.user:
+                return True
+            return False
+
+        return True
+
+
 class HasEventDestroy(BasePermission):
     message = "You're not the creator of this event"
 
     def has_object_permission(self, request, view, obj):
         if request.method == 'DELETE':
             if obj.creator == request.user:
+                return True
+            return False
+        return True
+
+
+class HasPatientDestroy(BasePermission):
+    message = "You're not the doctor of this patient"
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE':
+            if obj.doctor == request.user:
                 return True
             return False
         return True

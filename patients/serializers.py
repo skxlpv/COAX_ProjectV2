@@ -7,7 +7,8 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = ['id', 'first_name', 'last_name', 'phone_number',
-                  'created_at', 'diagnosis', 'receipt', 'doctor', 'is_discharged']
+                  'created_at', 'diagnosis', 'receipt',
+                  'doctor', 'hospital', 'is_discharged']
 
     def update(self, instance, validated_data):
         instance.receipt = validated_data.get('receipt', instance.receipt)
