@@ -28,9 +28,9 @@ api_urlpatterns_v1 = [
     path('events/', include(('events.urls', 'events'))),
     path('patients/', include(('patients.urls', 'patients'))),
 
-    path(r'my-profile/', ProfileViewSet.as_view({'get': 'list', "patch": "partial_update"}),
+    path(r'profile/', ProfileViewSet.as_view({'get': 'list', "patch": "partial_update"}),
          name='profile'),
-    path(r'my-profile/change-password', ProfileViewSet.as_view({"put": "change_password"}),
+    path(r'profile/change-password', ProfileViewSet.as_view({"put": "change_password"}),
          name='profile-change-password')
 ]
 
